@@ -1,0 +1,50 @@
+# 虚拟环境
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 配置和敏感信息
+config.py
+*.config.py
+.env
+.env.local
+
+# Tushare 配置（包含 Token）
+tushare_config.py
+
+# 日志
+*.log
+logs/
+
+# 数据文件
+*.csv
+*.xlsx
+*.xls
+data/
