@@ -1,0 +1,303 @@
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/data/reader/stock_reader.py:162: FutureWarning: Series.fillna with 'method' is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  df["adj_factor"] = df["adj_factor"].fillna(method="ffill").fillna(1.0)
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 36134 (\N{CJK UNIFIED IDEOGRAPH-8D26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 25143 (\N{CJK UNIFIED IDEOGRAPH-6237}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 26435 (\N{CJK UNIFIED IDEOGRAPH-6743}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 30410 (\N{CJK UNIFIED IDEOGRAPH-76CA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 21160 (\N{CJK UNIFIED IDEOGRAPH-52A8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 37327 (\N{CJK UNIFIED IDEOGRAPH-91CF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 31361 (\N{CJK UNIFIED IDEOGRAPH-7A81}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 30772 (\N{CJK UNIFIED IDEOGRAPH-7834}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 31574 (\N{CJK UNIFIED IDEOGRAPH-7B56}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 30053 (\N{CJK UNIFIED IDEOGRAPH-7565}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 26354 (\N{CJK UNIFIED IDEOGRAPH-66F2}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 32447 (\N{CJK UNIFIED IDEOGRAPH-7EBF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 24635 (\N{CJK UNIFIED IDEOGRAPH-603B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 25910 (\N{CJK UNIFIED IDEOGRAPH-6536}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 24180 (\N{CJK UNIFIED IDEOGRAPH-5E74}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 21270 (\N{CJK UNIFIED IDEOGRAPH-5316}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 26368 (\N{CJK UNIFIED IDEOGRAPH-6700}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 22238 (\N{CJK UNIFIED IDEOGRAPH-56DE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 25764 (\N{CJK UNIFIED IDEOGRAPH-64A4}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 32988 (\N{CJK UNIFIED IDEOGRAPH-80DC}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 29575 (\N{CJK UNIFIED IDEOGRAPH-7387}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 30408 (\N{CJK UNIFIED IDEOGRAPH-76C8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 20111 (\N{CJK UNIFIED IDEOGRAPH-4E8F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 27604 (\N{CJK UNIFIED IDEOGRAPH-6BD4}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 21021 (\N{CJK UNIFIED IDEOGRAPH-521D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 22987 (\N{CJK UNIFIED IDEOGRAPH-59CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 36164 (\N{CJK UNIFIED IDEOGRAPH-8D44}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 37329 (\N{CJK UNIFIED IDEOGRAPH-91D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 26085 (\N{CJK UNIFIED IDEOGRAPH-65E5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:185: UserWarning: Glyph 26399 (\N{CJK UNIFIED IDEOGRAPH-671F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 36134 (\N{CJK UNIFIED IDEOGRAPH-8D26}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 25143 (\N{CJK UNIFIED IDEOGRAPH-6237}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 26435 (\N{CJK UNIFIED IDEOGRAPH-6743}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 30410 (\N{CJK UNIFIED IDEOGRAPH-76CA}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 21160 (\N{CJK UNIFIED IDEOGRAPH-52A8}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 37327 (\N{CJK UNIFIED IDEOGRAPH-91CF}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 31361 (\N{CJK UNIFIED IDEOGRAPH-7A81}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 30772 (\N{CJK UNIFIED IDEOGRAPH-7834}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 31574 (\N{CJK UNIFIED IDEOGRAPH-7B56}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 30053 (\N{CJK UNIFIED IDEOGRAPH-7565}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 26354 (\N{CJK UNIFIED IDEOGRAPH-66F2}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 32447 (\N{CJK UNIFIED IDEOGRAPH-7EBF}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 24635 (\N{CJK UNIFIED IDEOGRAPH-603B}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 25910 (\N{CJK UNIFIED IDEOGRAPH-6536}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 24180 (\N{CJK UNIFIED IDEOGRAPH-5E74}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 21270 (\N{CJK UNIFIED IDEOGRAPH-5316}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 26368 (\N{CJK UNIFIED IDEOGRAPH-6700}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 22238 (\N{CJK UNIFIED IDEOGRAPH-56DE}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 25764 (\N{CJK UNIFIED IDEOGRAPH-64A4}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 32988 (\N{CJK UNIFIED IDEOGRAPH-80DC}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 29575 (\N{CJK UNIFIED IDEOGRAPH-7387}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 30408 (\N{CJK UNIFIED IDEOGRAPH-76C8}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 20111 (\N{CJK UNIFIED IDEOGRAPH-4E8F}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 27604 (\N{CJK UNIFIED IDEOGRAPH-6BD4}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 21021 (\N{CJK UNIFIED IDEOGRAPH-521D}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 22987 (\N{CJK UNIFIED IDEOGRAPH-59CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 36164 (\N{CJK UNIFIED IDEOGRAPH-8D44}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 37329 (\N{CJK UNIFIED IDEOGRAPH-91D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 26085 (\N{CJK UNIFIED IDEOGRAPH-65E5}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:188: UserWarning: Glyph 26399 (\N{CJK UNIFIED IDEOGRAPH-671F}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 26085 (\N{CJK UNIFIED IDEOGRAPH-65E5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 26399 (\N{CJK UNIFIED IDEOGRAPH-671F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 20215 (\N{CJK UNIFIED IDEOGRAPH-4EF7}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 26684 (\N{CJK UNIFIED IDEOGRAPH-683C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 21160 (\N{CJK UNIFIED IDEOGRAPH-52A8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 37327 (\N{CJK UNIFIED IDEOGRAPH-91CF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 31361 (\N{CJK UNIFIED IDEOGRAPH-7A81}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 30772 (\N{CJK UNIFIED IDEOGRAPH-7834}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 31574 (\N{CJK UNIFIED IDEOGRAPH-7B56}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 30053 (\N{CJK UNIFIED IDEOGRAPH-7565}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 20132 (\N{CJK UNIFIED IDEOGRAPH-4EA4}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 26131 (\N{CJK UNIFIED IDEOGRAPH-6613}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 26631 (\N{CJK UNIFIED IDEOGRAPH-6807}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 35760 (\N{CJK UNIFIED IDEOGRAPH-8BB0}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 20080 (\N{CJK UNIFIED IDEOGRAPH-4E70}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 20837 (\N{CJK UNIFIED IDEOGRAPH-5165}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 21334 (\N{CJK UNIFIED IDEOGRAPH-5356}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:234: UserWarning: Glyph 20986 (\N{CJK UNIFIED IDEOGRAPH-51FA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 20215 (\N{CJK UNIFIED IDEOGRAPH-4EF7}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 26684 (\N{CJK UNIFIED IDEOGRAPH-683C}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 21160 (\N{CJK UNIFIED IDEOGRAPH-52A8}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 37327 (\N{CJK UNIFIED IDEOGRAPH-91CF}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 31361 (\N{CJK UNIFIED IDEOGRAPH-7A81}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 30772 (\N{CJK UNIFIED IDEOGRAPH-7834}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 31574 (\N{CJK UNIFIED IDEOGRAPH-7B56}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 30053 (\N{CJK UNIFIED IDEOGRAPH-7565}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 20132 (\N{CJK UNIFIED IDEOGRAPH-4EA4}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 26131 (\N{CJK UNIFIED IDEOGRAPH-6613}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 26631 (\N{CJK UNIFIED IDEOGRAPH-6807}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 35760 (\N{CJK UNIFIED IDEOGRAPH-8BB0}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 26085 (\N{CJK UNIFIED IDEOGRAPH-65E5}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 26399 (\N{CJK UNIFIED IDEOGRAPH-671F}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 20080 (\N{CJK UNIFIED IDEOGRAPH-4E70}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 20837 (\N{CJK UNIFIED IDEOGRAPH-5165}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 21334 (\N{CJK UNIFIED IDEOGRAPH-5356}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+/Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/backtest/run_momentum_breakout.py:237: UserWarning: Glyph 20986 (\N{CJK UNIFIED IDEOGRAPH-51FA}) missing from font(s) DejaVu Sans.
+  plt.savefig(save_path, dpi=150, bbox_inches='tight')
+============================================================
+📊 动量突破策略回测 - 600089.SH
+============================================================
+✅ 数据加载完成: 1455 条记录
+   时间范围: 2020-01-02 ~ 2025-12-31
+
+📈 策略参数:
+   长期均线周期: 60
+   短期均线周期: 20
+   最小涨幅要求: 5.0%
+   成交量倍数: 2.0x
+   成交量均线周期: 20
+   硬止损幅度: -8.0%
+   仓位比例: 50%
+   财报规避: 启用
+   [v2.0] 乖离率阈值: 0.25
+   [v2.0] ATR追踪止盈: 启用 (倍数=2.5)
+
+⏳ 回测运行中...
+[BUY #1] 2020-04-17 @ 5.37 | Stop: 4.91 | Reason: MA60多头; 涨幅7.70%; 倍量突破
+[SELL #1] 2020-04-28 @ 4.92 | PnL: -42524 | Cash: 957476.45 | Reason: 亏损-8.51%达到硬止损
+[BUY #2] 2020-07-21 @ 5.53 | Stop: 4.86 | Reason: MA60多头; 涨幅8.45%; 倍量突破
+[SELL #2] 2020-08-20 @ 5.77 | PnL: +21106 | Cash: 978582.31 | Reason: 跌破MA20 5.86
+[BUY #3] 2020-10-12 @ 6.36 | Stop: 6.21 | Reason: MA60多头; 涨幅5.47%; 倍量突破
+[SELL #3] 2020-10-19 @ 6.15 | PnL: -16657 | Cash: 961925.36 | Reason: 跌破信号日低点 6.21
+[BUY #4] 2020-12-16 @ 5.77 | Stop: 5.68 | Reason: MA60多头; 涨幅9.84%; 倍量突破
+[SELL #4] 2021-02-24 @ 8.38 | PnL: +217367 | Cash: 1179292.42 | Reason: 跌破MA20 8.90
+[BUY #5] 2021-04-30 @ 8.43 | Stop: 8.40 | Reason: MA60多头; 涨幅5.43%; 倍量突破
+[SELL #5] 2021-04-30 @ 8.36 | PnL: -5211 | Cash: 1174081.01 | Reason: 跌破信号日低点 8.40
+[BUY #6] 2021-06-25 @ 8.47 | Stop: 7.66 | Reason: MA60多头; 涨幅10.04%; 倍量突破
+[SELL #6] 2021-09-24 @ 17.31 | PnL: +612736 | Cash: 1786816.66 | Reason: 跌破MA20 17.65
+[BUY #7] 2021-12-16 @ 16.47 | Stop: 15.42 | Reason: MA60多头; 涨幅5.84%; 倍量突破
+[SELL #7] 2021-12-20 @ 15.25 | PnL: -65893 | Cash: 1720923.27 | Reason: 跌破信号日低点 15.42
+[BUY #8] 2022-03-11 @ 14.07 | Stop: 13.74 | Reason: MA60多头; 涨幅5.25%; 倍量突破
+[SELL #8] 2022-03-15 @ 13.66 | PnL: -24901 | Cash: 1696021.90 | Reason: 跌破信号日低点 13.74
+[BUY #9] 2023-03-14 @ 15.71 | Stop: 15.18 | Reason: MA60多头; 涨幅7.40%; 倍量突破
+[SELL #9] 2023-03-23 @ 15.18 | PnL: -28560 | Cash: 1667461.84 | Reason: 跌破信号日低点 15.18
+[BUY #10] 2024-03-07 @ 15.74 | Stop: 14.92 | Reason: MA60多头; 涨幅5.20%; 倍量突破
+[SELL #10] 2024-03-21 @ 15.02 | PnL: -38312 | Cash: 1629150.07 | Reason: 跌破MA20 15.10
+[BUY #11] 2024-10-08 @ 15.76 | Stop: 13.66 | Reason: MA60多头; 涨幅6.94%; 倍量突破
+[SELL #11] 2024-10-08 @ 14.68 | PnL: -55621 | Cash: 1573528.93 | Reason: 触发ATR追踪止盈(14.68 < 14.70)
+[BUY #12] 2024-10-24 @ 13.68 | Stop: 12.99 | Reason: MA60多头; 涨幅5.95%; 倍量突破
+[SELL #12] 2024-11-15 @ 13.65 | PnL: -1690 | Cash: 1571838.54 | Reason: 跌破MA20 13.85
+[BUY #13] 2025-07-22 @ 13.26 | Stop: 12.75 | Reason: MA60多头; 涨幅6.75%; 倍量突破
+[SELL #13] 2025-08-04 @ 13.33 | PnL: +4144 | Cash: 1575982.54 | Reason: 触发ATR追踪止盈(13.33 < 13.35)
+[BUY #14] 2025-08-22 @ 14.08 | Stop: 13.82 | Reason: MA60多头; 涨幅5.57%; 倍量突破
+[SELL #14] 2025-11-18 @ 22.79 | PnL: +486889 | Cash: 2062871.54 | Reason: 触发ATR追踪止盈(22.79 < 23.20)
+
+[DEBUG] Total Buys: 14, Total Sells: 14, Cash: 2062871.54
+
+======================================================================
+  Momentum Breakout Strategy Backtest Report 600089.SH
+======================================================================
+
+[ Performance Summary ]
+  Initial Capital:      1,000,000.00
+  Final Equity:          2,062,871.54
+  Total Return:          106.29%
+  Annualized Return:     13.44%
+
+[ Risk Control ]
+  Max Drawdown:          408,407.57 (20.76%)
+
+[ Trading Statistics ]
+  Total Trades:          14
+  Winning Trades:        5 (35.7%)
+  Losing Trades:         9
+  Avg Win:               268,448.32
+  Avg Loss:              -31,041.12
+  Profit/Loss Ratio:     8.65
+
+[ Strategy Evaluation ]
+  [OK] Win Rate 35.7% (Trend strategy = low win rate)
+  [OK] P/L Ratio 8.65 (>=2.5 target)
+  [OK] Max Drawdown 20.76% (<=25% target)
+  [OK] Trade Frequency 14 (Low freq long-wave)
+
+[ Trade Details ]
+----------------------------------------------------------------------
+Entry Date      Entry Exit Date        Exit          PnL        % Reason
+----------------------------------------------------------------------
+2020-04-17       5.37 2020-04-28       4.92      -42,524    -8.5% 亏损-8.51%达到硬止损
+2020-07-21       5.53 2020-08-20       5.77      +21,106    +4.4% 跌破MA20 5.86
+2020-10-12       6.36 2020-10-19       6.15      -16,657    -3.4% 跌破信号日低点 6.21
+2020-12-16       5.77 2021-02-24       8.38     +217,367   +45.2% 跌破MA20 8.90
+2021-04-30       8.43 2021-04-30       8.36       -5,211    -0.9% 跌破信号日低点 8.40
+2021-06-25       8.47 2021-09-24      17.31     +612,736  +104.4% 跌破MA20 17.65
+2021-12-16      16.47 2021-12-20      15.25      -65,893    -7.4% 跌破信号日低点 15.42
+2022-03-11      14.07 2022-03-15      13.66      -24,901    -2.9% 跌破信号日低点 13.74
+2023-03-14      15.71 2023-03-23      15.18      -28,560    -3.4% 跌破信号日低点 15.18
+2024-03-07      15.74 2024-03-21      15.02      -38,312    -4.6% 跌破MA20 15.10
+2024-10-08      15.76 2024-10-08      14.68      -55,621    -6.8% 触发ATR追踪止盈(14.68 < 14
+2024-10-24      13.68 2024-11-15      13.65       -1,690    -0.2% 跌破MA20 13.85
+2025-07-22      13.26 2025-08-04      13.33       +4,144    +0.5% 触发ATR追踪止盈(13.33 < 13
+2025-08-22      14.08 2025-11-18      22.79     +486,889   +61.9% 触发ATR追踪止盈(22.79 < 23
+----------------------------------------------------------------------
+======================================================================
+
+
+📈 生成可视化图表...
+✅ 图表已保存至: backtest_results_reverted_v2/equity_curve_600089_SH.png
+✅ 交易图表已保存至: backtest_results_reverted_v2/trades_600089_SH.png
+✅ 交易明细已导出至: backtest_results_reverted_v2/trades_detail_600089_SH.csv
+
+✨ 回测完成!

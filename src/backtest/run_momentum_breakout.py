@@ -75,10 +75,6 @@ def run_backtest(
     bias_threshold: float = 0.25,
     use_trailing_stop: bool = True,
     atr_multiplier: float = 2.5,
-    # 情绪参数 (v3.0)
-    use_sentiment_exit: bool = True,
-    rsi_exhaustion: float = 85.0,
-    roc_euphoria: float = 20.0,
     # 回测参数
     initial_capital: float = 1000000.0,
 ) -> BacktestResult:
@@ -100,10 +96,7 @@ def run_backtest(
         earnings_lead_days=3,
         bias_threshold=bias_threshold,
         use_trailing_stop=use_trailing_stop,
-        atr_multiplier=atr_multiplier,
-        use_sentiment_exit=use_sentiment_exit,
-        rsi_exhaustion=rsi_exhaustion,
-        roc_euphoria=roc_euphoria
+        atr_multiplier=atr_multiplier
     )
     
     print("\n📈 策略参数:")
@@ -122,9 +115,6 @@ def run_backtest(
     # v2.0 参数打印
     print(f"   [v2.0] 乖离率阈值: {bias_threshold}")
     print(f"   [v2.0] ATR追踪止盈: {'启用' if use_trailing_stop else '禁用'} (倍数={atr_multiplier})")
-    
-    # v3.0 参数打印
-    print(f"   [v3.0] 情绪离场机制: {'启用' if use_sentiment_exit else '禁用'} (RSI={rsi_exhaustion}, ROC3={roc_euphoria}%)")
     
     print("\n⏳ 回测运行中...")
     result = strategy.run(df, initial_capital, earnings_dates)
@@ -296,11 +286,6 @@ def main():
     parser.add_argument('--no-trailing', action='store_true', help='禁用ATR追踪止盈')
     parser.add_argument('--atr-multi', type=float, default=2.5, help='ATR追踪止盈倍数')
     
-    # v3.0 参数
-    parser.add_argument('--no-sentiment', action='store_true', help='禁用情绪离场机制')
-    parser.add_argument('--rsi-limit', type=float, default=85.0, help='RSI狂热阈值')
-    parser.add_argument('--roc-limit', type=float, default=20.0, help='3日爆发涨幅阈值')
-    
     parser.add_argument('--output-dir', type=str, default='backtest_results', help='输出目录')
     
     args = parser.parse_args()
@@ -330,9 +315,6 @@ def main():
         bias_threshold=args.bias,
         use_trailing_stop=not args.no_trailing,
         atr_multiplier=args.atr_multi,
-        use_sentiment_exit=not args.no_sentiment,
-        rsi_exhaustion=args.rsi_limit,
-        roc_euphoria=args.roc_limit,
         initial_capital=args.capital,
     )
     

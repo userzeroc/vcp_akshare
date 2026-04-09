@@ -113,11 +113,6 @@ class MomentumBreakoutStrategy:
         bias_threshold: float = 0.25,      # 乖离率阈值 (防止追高)
         use_trailing_stop: bool = True,    # 启用动态追踪止盈
         atr_multiplier: float = 2.5,        # ATR 追踪倍数
-        # v3.0 情绪参数
-        use_sentiment_exit: bool = True,   # 启用情绪离场机制
-        rsi_exhaustion: float = 85.0,      # RSI 狂热阈值
-        roc_euphoria: float = 20.0,         # 3日爆发涨幅阈值
-        vol_climax_mult: float = 3.0,      # 天量倍数
     ):
         self.ma_long_period = ma_long_period
         self.ma_short_period = ma_short_period
@@ -134,10 +129,6 @@ class MomentumBreakoutStrategy:
         self.bias_threshold = bias_threshold
         self.use_trailing_stop = use_trailing_stop
         self.atr_multiplier = atr_multiplier
-        self.use_sentiment_exit = use_sentiment_exit
-        self.rsi_exhaustion = rsi_exhaustion
-        self.roc_euphoria = roc_euphoria
-        self.vol_climax_mult = vol_climax_mult
     
     def _calculate_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """计算所有技术指标"""
@@ -165,25 +156,8 @@ class MomentumBreakoutStrategy:
         if self.use_atr_filter:
             df['atr_ratio'] = df['atr'] / df['atr'].rolling(window=self.atr_period).mean()
         
-        # v3.0 计算情绪指标
-        # 1. RSI(14)
-        df['rsi'] = self._calculate_rsi(df['close'], 14)
-        # 2. 3日变动率 (ROC3)
-        df['roc3'] = df['close'].pct_change(3) * 100
-        # 3. 成交量比率
-        df['vol_ratio'] = df['vol'] / df['vol_ma20']
-        
         return df
     
-    def _calculate_rsi(self, series: pd.Series, period: int = 14) -> pd.Series:
-        """计算 RSI"""
-        delta = series.diff()
-        gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
-        loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
-        # 避免除以0
-        loss = loss.replace(0, 0.0001)
-        rs = gain / loss
-        return 100 - (100 / (1 + rs))
     
     def _check_buy_conditions(self, row: pd.Series) -> Tuple[bool, str]:
         """检查买入条件"""
@@ -239,29 +213,8 @@ class MomentumBreakoutStrategy:
         if row['close'] < row['ma20']:
             return True, f"跌破MA20 {row['ma20']:.2f}"
         
-        # 优化条件: 情绪护盾 (Euphoria Exit)
-        if self.use_sentiment_exit:
-            is_euphoric, reason = self._is_euphoric(row)
-            if is_euphoric:
-                return True, reason
-        
         return False, ""
     
-    def _is_euphoric(self, row: pd.Series) -> Tuple[bool, str]:
-        """检测是否存在非理性繁荣/情绪过热"""
-        # 1. RSI 超买极限
-        if row['rsi'] > self.rsi_exhaustion:
-            return True, f"情绪过热: RSI({row['rsi']:.1f}) > {self.rsi_exhaustion}"
-        
-        # 2. 垂直加速 (3日急涨)
-        if row['roc3'] > self.roc_euphoria:
-            return True, f"情绪过热: 3日急涨({row['roc3']:.1f}%) > {self.roc_euphoria}%"
-        
-        # 3. 高位天量 (Blow-off)
-        if row['vol_ratio'] > self.vol_climax_mult and row['bias60'] > 0.3:
-            return True, f"情绪过热: 高位天量(倍数:{row['vol_ratio']:.1f})"
-            
-        return False, ""
     
     def run(
         self, 

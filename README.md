@@ -69,3 +69,5 @@ src/
    print("Tushare Token is:", settings.tushare.token)
    print("DB URL is:", settings.db.database_url)
    ```
+## 五、 策略说明文档
+- [动量突破策略 v2.0 规格说明书](docs/momentum_breakout_v2.md)
