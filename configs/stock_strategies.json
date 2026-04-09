@@ -1,0 +1,28 @@
+
+{
+  "601899.SH": {
+    "VCPStrategy": {
+      "vol_exhaust_ratio": 0.7,
+      "last_t_depth": 0.15,
+      "setup_ready_days": 10
+    },
+    "MomentumBreakoutStrategy": {
+      "min_pct_chg": 4.0
+    }
+  },
+  "002475.SZ": {
+    "VCPStrategy": {
+      "vol_exhaust_ratio": 0.6,
+      "last_t_depth": 0.12
+    },
+    "MomentumBreakoutStrategy": {
+      "hard_stop_loss": -10.0,
+      "vol_multiplier": 1.5
+    }
+  },
+  "603993.SH": {
+    "VCPStrategy": {
+      "setup_ready_days": 7
+    }
+  }
+}

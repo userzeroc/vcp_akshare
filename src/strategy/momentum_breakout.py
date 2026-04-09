@@ -1,3 +1,4 @@
+
 """
 动量突破策略 (Momentum Breakout Strategy)
 ==========================================
@@ -6,87 +7,15 @@
 - 急涨慢跌、长周期洗盘、脉冲式爆发
 - 平时绝对空仓，信号出现立刻满仓
 - 截断亏损，让利润奔跑
-
-买入规则（三条件共振突破）:
-  A. 宏观趋势过滤：收盘价 > 60日均线 (MA60)
-  B. 价格爆发信号：当日收盘涨幅 > 5%
-  C. 资金异动信号：当日成交量 > 过去20日均量的2倍
-
-卖出规则:
-  A. 硬止损：收盘价跌破信号日大阳线最低价 或 亏损达-8%
-  B. 移动止盈：收盘价跌破20日均线 (MA20)
 """
 
 import pandas as pd
 import numpy as np
-from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
 from datetime import date
+from .base import BaseStrategy, Signal, Trade, Position, BacktestResult
 
-
-@dataclass
-class Signal:
-    """交易信号"""
-    date: date
-    signal_type: str  # 'buy', 'sell'
-    price: float
-    reason: str
-
-
-@dataclass
-class Trade:
-    """单笔交易记录"""
-    entry_date: date
-    entry_price: float
-    quantity: int
-    stop_loss_price: float
-    exit_date: Optional[date] = None
-    exit_price: Optional[float] = None
-    pnl: Optional[float] = None
-    pnl_pct: Optional[float] = None
-    exit_reason: Optional[str] = None
-    
-    def close(self, exit_date: date, exit_price: float, reason: str):
-        self.exit_date = exit_date
-        self.exit_price = exit_price
-        self.pnl = (exit_price - self.entry_price) * self.quantity
-        self.pnl_pct = (exit_price - self.entry_price) / self.entry_price * 100
-        self.exit_reason = reason
-
-
-@dataclass
-class Position:
-    """持仓状态"""
-    is_long: bool = False
-    entry_date: Optional[date] = None
-    entry_price: Optional[float] = None
-    quantity: int = 0
-    signal_low: Optional[float] = None  # 信号日最低价
-    highest_price: Optional[float] = None  # 持仓期间最高价
-
-
-@dataclass
-class BacktestResult:
-    """回测结果"""
-    trades: List[Trade] = field(default_factory=list)
-    equity_curve: List[Tuple[date, float]] = field(default_factory=list)
-    signals: List[Signal] = field(default_factory=list)
-    
-    # 性能指标
-    total_return: float = 0.0
-    annualized_return: float = 0.0
-    win_rate: float = 0.0
-    avg_win: float = 0.0
-    avg_loss: float = 0.0
-    profit_loss_ratio: float = 0.0
-    max_drawdown: float = 0.0
-    max_drawdown_pct: float = 0.0
-    total_trades: int = 0
-    winning_trades: int = 0
-    losing_trades: int = 0
-
-
-class MomentumBreakoutStrategy:
+class MomentumBreakoutStrategy(BaseStrategy):
     """
     动量突破策略
     
@@ -143,7 +72,7 @@ class MomentumBreakoutStrategy:
         # 计算乖离率
         df['bias60'] = (df['close'] - df['ma60']) / df['ma60']
         
-        # 计算 ATR (用于追踪止盈，即便是 use_atr_filter 为 False 也需要计算)
+        # 计算 ATR (用于追踪止盈)
         df['tr'] = np.maximum(
             df['high'] - df['low'],
             np.maximum(
@@ -157,7 +86,6 @@ class MomentumBreakoutStrategy:
             df['atr_ratio'] = df['atr'] / df['atr'].rolling(window=self.atr_period).mean()
         
         return df
-    
     
     def _check_buy_conditions(self, row: pd.Series) -> Tuple[bool, str]:
         """检查买入条件"""
@@ -178,11 +106,9 @@ class MomentumBreakoutStrategy:
             return False, "量能不足"
         reasons.append("倍量突破")
         
-        # 优化条件 D: 乖离率过滤 (防止涨幅过大后强弩之末)
         if pd.notna(row['bias60']):
             if row['bias60'] > self.bias_threshold:
                 return False, f"乖离率过高({row['bias60']:.2f} > {self.bias_threshold})"
-            # reasons.append("估值合理")
         
         if self.use_atr_filter and pd.notna(row.get('atr_ratio')):
             if row['atr_ratio'] >= self.atr_threshold_ratio:
@@ -198,13 +124,12 @@ class MomentumBreakoutStrategy:
         signal_low = position.signal_low
         pnl_pct = (current_price - entry_price) / entry_price * 100
         
-        if current_price < signal_low:
+        if signal_low and current_price < signal_low:
             return True, f"跌破信号日低点 {signal_low:.2f}"
         
         if pnl_pct <= self.hard_stop_loss:
             return True, f"亏损{pnl_pct:.2f}%达到硬止损"
         
-        # 优化条件: ATR 动态追踪止盈 (吊灯止盈)
         if self.use_trailing_stop and position.highest_price and pd.notna(row['atr']):
             trailing_line = position.highest_price - self.atr_multiplier * row['atr']
             if current_price < trailing_line:
@@ -215,7 +140,6 @@ class MomentumBreakoutStrategy:
         
         return False, ""
     
-    
     def run(
         self, 
         df: pd.DataFrame, 
@@ -223,7 +147,7 @@ class MomentumBreakoutStrategy:
         earnings_dates: Optional[List[str]] = None,
         debug: bool = True
     ) -> BacktestResult:
-        """运行回测"""
+        """运行回测流程"""
         df = self._calculate_indicators(df)
         
         cash = initial_capital
@@ -237,17 +161,15 @@ class MomentumBreakoutStrategy:
             earnings_dates_set = {pd.to_datetime(d).date() for d in earnings_dates}
         
         warmup = max(self.ma_long_period, self.vol_ma_period)
-        buy_count = 0
-        sell_count = 0
         
         for i in range(warmup, len(df)):
             row = df.iloc[i]
-            current_date = row['trade_date'].date() if isinstance(row['trade_date'], pd.Timestamp) else row['trade_date']
+            # 统一日期格式为 datetime.date
+            current_date = row['trade_date'].date() if hasattr(row['trade_date'], 'date') else row['trade_date']
             close_price = row['close']
             
-            # ============ 持仓中 - 检查卖出 ============
+            # ============ 持仓中 ============
             if position.is_long:
-                # 更新持仓期间最高价
                 if close_price > position.highest_price:
                     position.highest_price = close_price
                 
@@ -266,52 +188,39 @@ class MomentumBreakoutStrategy:
                     )
                     trade.close(current_date, close_price, sell_reason)
                     trades.append(trade)
-                    # 修复 Bug: 应该回流总价值（本金 + 盈亏），而不仅仅是 PnL
                     cash += (position.quantity * close_price)
-                    # 现金不能为负
-                    cash = max(0, cash)
-                    # 卖出后equity更新为纯现金
                     equity_curve.append((current_date, cash))
-                    sell_count += 1
                     if debug:
-                        print(f"[SELL #{sell_count}] {current_date} @ {close_price:.2f} | PnL: {trade.pnl:+.0f} | Cash: {cash:.2f} | Reason: {sell_reason}")
+                        print(f"[SELL] {current_date} @ {close_price:.2f} | PnL: {trade.pnl_pct:+.1f}% | Reason: {sell_reason}")
                     position = Position()
                     signals.append(Signal(current_date, 'sell', close_price, sell_reason))
                 else:
-                    # 持仓中：equity = cash + 持仓市值
-                    current_value = cash + position.quantity * close_price
-                    equity_curve.append((current_date, current_value))
+                    equity_curve.append((current_date, cash + position.quantity * close_price))
             
-            # ============ 空仓中 - 检查买入 ============
+            # ============ 空仓中 ============
             else:
-                # 空仓中：equity = cash
                 equity_curve.append((current_date, cash))
                 
+                # 规避财报黑名单期
                 if self.avoid_earnings and self.earnings_lead_days > 0:
                     in_blackout = False
-                    for j in range(i, min(i + self.earnings_lead_days + 5, len(df))):
-                        future_date = df.iloc[j]['trade_date'].date() if isinstance(df.iloc[j]['trade_date'], pd.Timestamp) else df.iloc[j]['trade_date']
+                    for j in range(i, min(i + self.earnings_lead_days, len(df))):
+                        future_date = df.iloc[j]['trade_date'].date() if hasattr(df.iloc[j]['trade_date'], 'date') else df.iloc[j]['trade_date']
                         if future_date in earnings_dates_set:
                             in_blackout = True
                             break
-                    if in_blackout:
-                        continue
+                    if in_blackout: continue
                 
                 buy_triggered, buy_reason = self._check_buy_conditions(row)
                 
                 if buy_triggered and i + 1 < len(df):
                     next_row = df.iloc[i + 1]
                     buy_price = next_row['open']
-                    buy_date = next_row['trade_date'].date() if isinstance(next_row['trade_date'], pd.Timestamp) else next_row['trade_date']
+                    buy_date = next_row['trade_date'].date() if hasattr(next_row['trade_date'], 'date') else next_row['trade_date']
                     
-                    # 关键修复：确保有足够的可用资金
-                    available_capital = max(0, cash * self.position_size)
-                    quantity = int(available_capital / buy_price / 100) * 100
-                    
+                    quantity = int(cash * self.position_size / buy_price / 100) * 100
                     if quantity > 0:
-                        cost = quantity * buy_price
-                        cash -= cost
-                        
+                        cash -= quantity * buy_price
                         position = Position(
                             is_long=True,
                             entry_date=buy_date,
@@ -320,151 +229,25 @@ class MomentumBreakoutStrategy:
                             signal_low=row['low'],
                             highest_price=buy_price
                         )
-                        
-                        # 买入后立即更新equity_curve：用当天收盘价计算持仓市值
-                        # 替换当天刚append的equity记录（用cash）改为持仓总价值
-                        current_value = cash + position.quantity * buy_price
-                        equity_curve[-1] = (current_date, current_value)  # 替换记录
-                        
-                        buy_count += 1
+                        # 修正买入当日的权益曲线
+                        equity_curve[-1] = (current_date, cash + quantity * buy_price)
                         if debug:
-                            print(f"[BUY #{buy_count}] {buy_date} @ {buy_price:.2f} | Stop: {row['low']:.2f} | Reason: {buy_reason}")
+                            print(f"[BUY] {buy_date} @ {buy_price:.2f} | Reason: {buy_reason}")
                         signals.append(Signal(buy_date, 'buy', buy_price, buy_reason))
             
-            # 最后一天强制平仓
+            # 最后一天平仓
             if i == len(df) - 1 and position.is_long:
-                trade = Trade(
-                    entry_date=position.entry_date,
-                    entry_price=position.entry_price,
-                    quantity=position.quantity,
-                    stop_loss_price=position.signal_low
-                )
+                trade = Trade(position.entry_date, position.entry_price, position.quantity, position.signal_low)
                 trade.close(current_date, close_price, "回测结束强制平仓")
                 trades.append(trade)
-                # 修复 Bug: 应该回流总价值
                 cash += (position.quantity * close_price)
-        
-        if debug:
-            print(f"\n[DEBUG] Total Buys: {buy_count}, Total Sells: {sell_count}, Cash: {cash:.2f}")
-        
+                equity_curve[-1] = (current_date, cash)
+
         result = self._calculate_metrics(trades, equity_curve, initial_capital)
         result.signals = signals
         return result
-    
-    def _calculate_metrics(
-        self,
-        trades: List[Trade],
-        equity_curve: List[Tuple[date, float]],
-        initial_capital: float
-    ) -> BacktestResult:
-        """计算性能指标"""
-        result = BacktestResult()
-        result.trades = trades
-        result.equity_curve = equity_curve
-        
-        if not trades:
-            return result
-        
-        result.total_trades = len(trades)
-        winning_trades = [t for t in trades if t.pnl > 0]
-        losing_trades = [t for t in trades if t.pnl <= 0]
-        result.winning_trades = len(winning_trades)
-        result.losing_trades = len(losing_trades)
-        
-        result.win_rate = len(winning_trades) / len(trades) * 100 if trades else 0
-        result.avg_win = np.mean([t.pnl for t in winning_trades]) if winning_trades else 0
-        result.avg_loss = np.mean([t.pnl for t in losing_trades]) if losing_trades else 0
-        
-        if result.avg_loss != 0:
-            result.profit_loss_ratio = abs(result.avg_win / result.avg_loss)
-        else:
-            result.profit_loss_ratio = float('inf') if winning_trades else 0
-        
-        final_value = equity_curve[-1][1] if equity_curve else initial_capital
-        result.total_return = (final_value - initial_capital) / initial_capital * 100
-        
-        if len(equity_curve) >= 2:
-            years = (equity_curve[-1][0] - equity_curve[0][0]).days / 365.25
-            if years > 0 and final_value > 0 and initial_capital > 0:
-                result.annualized_return = ((final_value / initial_capital) ** (1 / years) - 1) * 100
-        
-        peak = initial_capital
-        max_dd = 0
-        max_dd_pct = 0
-        for dt, value in equity_curve:
-            if value > peak:
-                peak = value
-            dd = peak - value
-            dd_pct = dd / peak * 100 if peak > 0 else 0
-            if dd > max_dd:
-                max_dd = dd
-                max_dd_pct = dd_pct
-        result.max_drawdown = max_dd
-        result.max_drawdown_pct = max_dd_pct
-        
-        return result
-
 
 def print_backtest_report(result: BacktestResult, stock_code: str = ""):
-    """打印回测报告"""
-    final_value = result.equity_curve[-1][1] if result.equity_curve else 1000000.0
-    
-    print("\n" + "=" * 70)
-    print(f"  Momentum Breakout Strategy Backtest Report {stock_code}")
-    print("=" * 70)
-    
-    print(f"\n[ Performance Summary ]")
-    print(f"  Initial Capital:      1,000,000.00")
-    print(f"  Final Equity:          {final_value:,.2f}")
-    print(f"  Total Return:          {result.total_return:.2f}%")
-    print(f"  Annualized Return:     {result.annualized_return:.2f}%")
-    
-    print(f"\n[ Risk Control ]")
-    print(f"  Max Drawdown:          {result.max_drawdown:,.2f} ({result.max_drawdown_pct:.2f}%)")
-    
-    print(f"\n[ Trading Statistics ]")
-    print(f"  Total Trades:          {result.total_trades}")
-    print(f"  Winning Trades:        {result.winning_trades} ({result.win_rate:.1f}%)")
-    print(f"  Losing Trades:         {result.losing_trades}")
-    print(f"  Avg Win:               {result.avg_win:,.2f}")
-    print(f"  Avg Loss:              {result.avg_loss:,.2f}")
-    print(f"  Profit/Loss Ratio:     {result.profit_loss_ratio:.2f}")
-    
-    # Strategy evaluation
-    print(f"\n[ Strategy Evaluation ]")
-    if result.win_rate < 45:
-        print(f"  [OK] Win Rate {result.win_rate:.1f}% (Trend strategy = low win rate)")
-    else:
-        print(f"  [!!] Win Rate {result.win_rate:.1f}% (Check for overfitting)")
-    
-    if result.profit_loss_ratio >= 2.5:
-        print(f"  [OK] P/L Ratio {result.profit_loss_ratio:.2f} (>=2.5 target)")
-    else:
-        print(f"  [!!] P/L Ratio {result.profit_loss_ratio:.2f} (Below 2.5 target)")
-    
-    if result.max_drawdown_pct <= 25:
-        print(f"  [OK] Max Drawdown {result.max_drawdown_pct:.2f}% (<=25% target)")
-    else:
-        print(f"  [!!] Max Drawdown {result.max_drawdown_pct:.2f}% (>25% warning)")
-    
-    if result.total_trades <= 25:
-        print(f"  [OK] Trade Frequency {result.total_trades} (Low freq long-wave)")
-    else:
-        print(f"  [!!] Trade Frequency {result.total_trades} (May be overtrading)")
-    
-    # Trade details
-    if result.trades:
-        print(f"\n[ Trade Details ]")
-        print("-" * 70)
-        print(f"{'Entry Date':<12} {'Entry':>8} {'Exit Date':<12} {'Exit':>8} {'PnL':>12} {'%':>8} {'Reason'}")
-        print("-" * 70)
-        for t in result.trades:
-            entry_str = t.entry_date.strftime('%Y-%m-%d') if hasattr(t.entry_date, 'strftime') else str(t.entry_date)
-            exit_str = t.exit_date.strftime('%Y-%m-%d') if t.exit_date and hasattr(t.exit_date, 'strftime') else str(t.exit_date)
-            pnl_str = f"{t.pnl:+,.0f}"
-            pct_str = f"{t.pnl_pct:+.1f}%"
-            reason = t.exit_reason[:20] if t.exit_reason else ""
-            print(f"{entry_str:<12} {t.entry_price:>8.2f} {exit_str:<12} {t.exit_price:>8.2f} {pnl_str:>12} {pct_str:>8} {reason}")
-        print("-" * 70)
-    
-    print("=" * 70 + "\n")
+    """保持向后兼容的打印函数"""
+    temp_strategy = MomentumBreakoutStrategy()
+    temp_strategy.print_report(result, stock_code)
