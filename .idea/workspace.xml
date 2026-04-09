@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ad3e7c2-b061-40f8-b07f-65caea0664a4" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/database/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab/demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab/demo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,8 +100,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.demo" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.demo" />
     </list>
     <recent_temporary>
       <list>
@@ -132,6 +129,7 @@
       <workItem from="1775655461370" duration="544000" />
       <workItem from="1775656026755" duration="9000" />
       <workItem from="1775656076652" duration="1138000" />
+      <workItem from="1775698953307" duration="387000" />
     </task>
     <servers />
   </component>

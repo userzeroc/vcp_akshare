@@ -14,3 +14,11 @@ alembic>=1.13.0        # 数据库迁移工具
 
 # 回测辅助与其它生态（根据后续扩展可能需要）
 # backtrader>=1.9.78
+
+# 可视化、统计分析与扩展数据源
+akshare>=1.18.0
+scipy>=1.15.0
+matplotlib>=3.10.0
+dash>=4.1.0
+dash-bootstrap-components>=2.0.4
+plotly>=6.6.0
