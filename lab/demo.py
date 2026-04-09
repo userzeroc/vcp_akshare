@@ -48,6 +48,11 @@ if __name__ == "__main__":
     waves_df = stats['waves_df']
     y = df['avg_price'].values
 
+    # ── 5.1 导出统计表为 JSON ──────────────────────────────────────────────
+    json_output_path = f"wave_analysis_{stock_code.replace('.', '_')}.json"
+    waves_df.to_json(json_output_path, orient='records', force_ascii=False, indent=2)
+    print(f"\n波动统计表已导出至: {json_output_path}")
+
     # ── 6. Dash 交互式可视化 ───────────────────────────────────────────────
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
