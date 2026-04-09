@@ -14,8 +14,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 import argparse
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 from src.data.reader import StockReader
 from src.strategy.momentum_breakout import (
@@ -122,122 +120,6 @@ def run_backtest(
     return result
 
 
-def plot_equity_curve(result: BacktestResult, stock_code: str, save_path: str = None):
-    """绘制权益曲线"""
-    if not result.equity_curve:
-        print("⚠️ 没有权益曲线数据可绘制")
-        return
-    
-    fig, axes = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
-    
-    # 提取数据
-    dates = [d for d, _ in result.equity_curve]
-    values = [v for _, v in result.equity_curve]
-    
-    # 图1: 权益曲线
-    ax1 = axes[0]
-    ax1.plot(dates, values, 'b-', linewidth=1.5, label='权益曲线')
-    ax1.axhline(y=values[0], color='gray', linestyle='--', alpha=0.7, label='初始资金')
-    ax1.fill_between(dates, values[0], values, alpha=0.3, color='blue')
-    
-    # 标记买卖点
-    for trade in result.trades:
-        if trade.exit_date:
-            exit_idx = dates.index(trade.exit_date) if trade.exit_date in dates else -1
-            if exit_idx >= 0:
-                color = 'green' if trade.pnl > 0 else 'red'
-                ax1.axvline(x=trade.exit_date, color=color, alpha=0.3, linewidth=0.5)
-    
-    ax1.set_ylabel('账户权益 (¥)', fontsize=12)
-    ax1.set_title(f'动量突破策略 - {stock_code} 权益曲线', fontsize=14, fontweight='bold')
-    ax1.legend(loc='upper left')
-    ax1.grid(True, alpha=0.3)
-    
-    # 添加收益信息
-    textstr = f'总收益: {result.total_return:.2f}%\n年化: {result.annualized_return:.2f}%\n最大回撤: {result.max_drawdown_pct:.2f}%\n胜率: {result.win_rate:.1f}%\n盈亏比: {result.profit_loss_ratio:.2f}'
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
-    ax1.text(0.02, 0.98, textstr, transform=ax1.transAxes, fontsize=10,
-             verticalalignment='top', bbox=props)
-    
-    # 图2: 回撤曲线
-    ax2 = axes[1]
-    peak = values[0]
-    drawdowns = []
-    for v in values:
-        if v > peak:
-            peak = v
-        dd = (peak - v) / peak * 100
-        drawdowns.append(dd)
-    
-    ax2.fill_between(dates, 0, drawdowns, alpha=0.5, color='red')
-    ax2.plot(dates, drawdowns, 'r-', linewidth=1)
-    ax2.set_ylabel('回撤 (%)', fontsize=12)
-    ax2.set_xlabel('日期', fontsize=12)
-    ax2.set_title('回撤曲线', fontsize=12)
-    ax2.grid(True, alpha=0.3)
-    
-    # 设置日期格式
-    for ax in axes:
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
-        plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
-    
-    plt.tight_layout()
-    
-    if save_path:
-        plt.savefig(save_path, dpi=150, bbox_inches='tight')
-        print(f"✅ 图表已保存至: {save_path}")
-    
-    plt.close()
-
-
-def plot_trades_on_price(df: pd.DataFrame, result: BacktestResult, stock_code: str, save_path: str = None):
-    """绘制价格图表并标记交易"""
-    if not result.equity_curve:
-        return
-    
-    # 计算均线指标用于绘图
-    df = df.copy()
-    df['ma60'] = df['close'].rolling(window=60).mean()
-    df['ma20'] = df['close'].rolling(window=20).mean()
-    
-    fig, ax = plt.subplots(figsize=(16, 8))
-    
-    # 绘制价格
-    ax.plot(df['trade_date'], df['close'], 'b-', linewidth=1, alpha=0.7, label='Close')
-    
-    # 绘制均线
-    ax.plot(df['trade_date'], df['ma60'], 'orange', linewidth=1, alpha=0.8, label='MA60')
-    ax.plot(df['trade_date'], df['ma20'], 'purple', linewidth=1, alpha=0.8, label='MA20')
-    
-    # 标记买入点
-    buy_signals = [s for s in result.signals if s.signal_type == 'buy']
-    for sig in buy_signals:
-        ax.scatter(sig.date, sig.price, marker='^', color='green', s=150, zorder=5, label='买入' if sig == buy_signals[0] else '')
-    
-    # 标记卖出点
-    sell_signals = [s for s in result.signals if s.signal_type == 'sell']
-    for sig in sell_signals:
-        ax.scatter(sig.date, sig.price, marker='v', color='red', s=150, zorder=5, label='卖出' if sig == sell_signals[0] else '')
-    
-    ax.set_xlabel('日期', fontsize=12)
-    ax.set_ylabel('价格 (¥)', fontsize=12)
-    ax.set_title(f'动量突破策略 - {stock_code} 交易标记', fontsize=14, fontweight='bold')
-    ax.legend(loc='upper left')
-    ax.grid(True, alpha=0.3)
-    
-    # 设置日期格式
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
-    plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
-    
-    plt.tight_layout()
-    
-    if save_path:
-        plt.savefig(save_path, dpi=150, bbox_inches='tight')
-        print(f"✅ 交易图表已保存至: {save_path}")
-    
-    plt.close()
 
 
 def export_trades_to_csv(result: BacktestResult, output_path: str):
@@ -321,13 +203,6 @@ def main():
     # 打印报告
     print_backtest_report(result, args.stock)
     
-    # 生成图表
-    print("\n📈 生成可视化图表...")
-    equity_path = os.path.join(args.output_dir, f"equity_curve_{args.stock.replace('.', '_')}.png")
-    trades_path = os.path.join(args.output_dir, f"trades_{args.stock.replace('.', '_')}.png")
-    
-    plot_equity_curve(result, args.stock, equity_path)
-    plot_trades_on_price(df, result, args.stock, trades_path)
     
     # 导出交易明细
     csv_path = os.path.join(args.output_dir, f"trades_detail_{args.stock.replace('.', '_')}.csv")
