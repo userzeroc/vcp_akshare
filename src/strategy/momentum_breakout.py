@@ -9,11 +9,15 @@
 - 截断亏损，让利润奔跑
 """
 
+import logging
 import pandas as pd
 import numpy as np
 from typing import Optional, List, Tuple
 from datetime import date
 from .base import BaseStrategy, Signal, Trade, Position, BacktestResult
+
+logger = logging.getLogger(__name__)
+
 
 class MomentumBreakoutStrategy(BaseStrategy):
     """
@@ -58,8 +62,12 @@ class MomentumBreakoutStrategy(BaseStrategy):
         self.bias_threshold = bias_threshold
         self.use_trailing_stop = use_trailing_stop
         self.atr_multiplier = atr_multiplier
-    
-    def _calculate_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
+
+    # ------------------------------------------------------------------
+    # BaseStrategy 接口实现
+    # ------------------------------------------------------------------
+
+    def calculate_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """计算所有技术指标"""
         df = df.copy()
         df['trade_date'] = pd.to_datetime(df['trade_date'])
@@ -86,7 +94,50 @@ class MomentumBreakoutStrategy(BaseStrategy):
             df['atr_ratio'] = df['atr'] / df['atr'].rolling(window=self.atr_period).mean()
         
         return df
-    
+
+    def get_warmup_period(self) -> int:
+        return max(self.ma_long_period, self.vol_ma_period)
+
+    def check_buy(self, row: pd.Series, df: pd.DataFrame, i: int, **kwargs) -> Tuple[bool, Optional[float], str]:
+        """检查买入条件，返回 (是否买入, 买入价格, 买入原因)"""
+        # 规避财报黑名单期
+        earnings_dates = kwargs.get('earnings_dates')
+        if self.avoid_earnings and earnings_dates and self.earnings_lead_days > 0:
+            earnings_dates_set = {pd.to_datetime(d).date() for d in earnings_dates}
+            for j in range(i, min(i + self.earnings_lead_days, len(df))):
+                future_date = df.iloc[j]['trade_date'].date() if hasattr(df.iloc[j]['trade_date'], 'date') else df.iloc[j]['trade_date']
+                if future_date in earnings_dates_set:
+                    return False, None, "财报黑名单期"
+
+        buy_ok, buy_reason = self._check_buy_conditions(row)
+        
+        if buy_ok and i + 1 < len(df):
+            next_row = df.iloc[i + 1]
+            buy_price = next_row['open']
+            return True, buy_price, buy_reason
+        
+        return False, None, ""
+
+    def check_sell(self, row: pd.Series, position: Position, **kwargs) -> Tuple[bool, str]:
+        """检查卖出条件"""
+        # 财报规避
+        earnings_dates = kwargs.get('earnings_dates')
+        if self.avoid_earnings and earnings_dates:
+            current_date = row['trade_date'].date() if hasattr(row['trade_date'], 'date') else row['trade_date']
+            earnings_dates_set = {pd.to_datetime(d).date() for d in earnings_dates}
+            if current_date in earnings_dates_set:
+                return True, "规避财报"
+
+        return self._check_sell_conditions(row, position)
+
+    def get_buy_date(self):
+        """标记：T+1 开盘价入场"""
+        return True
+
+    # ------------------------------------------------------------------
+    # 信号判断内部逻辑 (保持不变)
+    # ------------------------------------------------------------------
+
     def _check_buy_conditions(self, row: pd.Series) -> Tuple[bool, str]:
         """检查买入条件"""
         reasons = []
@@ -139,115 +190,3 @@ class MomentumBreakoutStrategy(BaseStrategy):
             return True, f"跌破MA20 {row['ma20']:.2f}"
         
         return False, ""
-    
-    def run(
-        self, 
-        df: pd.DataFrame, 
-        initial_capital: float = 1000000.0,
-        earnings_dates: Optional[List[str]] = None,
-        debug: bool = True
-    ) -> BacktestResult:
-        """运行回测流程"""
-        df = self._calculate_indicators(df)
-        
-        cash = initial_capital
-        position = Position()
-        trades: List[Trade] = []
-        equity_curve: List[Tuple[date, float]] = []
-        signals: List[Signal] = []
-        
-        earnings_dates_set = set()
-        if earnings_dates:
-            earnings_dates_set = {pd.to_datetime(d).date() for d in earnings_dates}
-        
-        warmup = max(self.ma_long_period, self.vol_ma_period)
-        
-        for i in range(warmup, len(df)):
-            row = df.iloc[i]
-            # 统一日期格式为 datetime.date
-            current_date = row['trade_date'].date() if hasattr(row['trade_date'], 'date') else row['trade_date']
-            close_price = row['close']
-            
-            # ============ 持仓中 ============
-            if position.is_long:
-                if close_price > position.highest_price:
-                    position.highest_price = close_price
-                
-                sell_triggered, sell_reason = self._check_sell_conditions(row, position)
-                
-                if self.avoid_earnings and current_date in earnings_dates_set:
-                    sell_triggered = True
-                    sell_reason = f"规避财报"
-                
-                if sell_triggered:
-                    trade = Trade(
-                        entry_date=position.entry_date,
-                        entry_price=position.entry_price,
-                        quantity=position.quantity,
-                        stop_loss_price=position.signal_low
-                    )
-                    trade.close(current_date, close_price, sell_reason)
-                    trades.append(trade)
-                    cash += (position.quantity * close_price)
-                    equity_curve.append((current_date, cash))
-                    if debug:
-                        print(f"[SELL] {current_date} @ {close_price:.2f} | PnL: {trade.pnl_pct:+.1f}% | Reason: {sell_reason}")
-                    position = Position()
-                    signals.append(Signal(current_date, 'sell', close_price, sell_reason))
-                else:
-                    equity_curve.append((current_date, cash + position.quantity * close_price))
-            
-            # ============ 空仓中 ============
-            else:
-                equity_curve.append((current_date, cash))
-                
-                # 规避财报黑名单期
-                if self.avoid_earnings and self.earnings_lead_days > 0:
-                    in_blackout = False
-                    for j in range(i, min(i + self.earnings_lead_days, len(df))):
-                        future_date = df.iloc[j]['trade_date'].date() if hasattr(df.iloc[j]['trade_date'], 'date') else df.iloc[j]['trade_date']
-                        if future_date in earnings_dates_set:
-                            in_blackout = True
-                            break
-                    if in_blackout: continue
-                
-                buy_triggered, buy_reason = self._check_buy_conditions(row)
-                
-                if buy_triggered and i + 1 < len(df):
-                    next_row = df.iloc[i + 1]
-                    buy_price = next_row['open']
-                    buy_date = next_row['trade_date'].date() if hasattr(next_row['trade_date'], 'date') else next_row['trade_date']
-                    
-                    quantity = int(cash * self.position_size / buy_price / 100) * 100
-                    if quantity > 0:
-                        cash -= quantity * buy_price
-                        position = Position(
-                            is_long=True,
-                            entry_date=buy_date,
-                            entry_price=buy_price,
-                            quantity=quantity,
-                            signal_low=row['low'],
-                            highest_price=buy_price
-                        )
-                        # 修正买入当日的权益曲线
-                        equity_curve[-1] = (current_date, cash + quantity * buy_price)
-                        if debug:
-                            print(f"[BUY] {buy_date} @ {buy_price:.2f} | Reason: {buy_reason}")
-                        signals.append(Signal(buy_date, 'buy', buy_price, buy_reason))
-            
-            # 最后一天平仓
-            if i == len(df) - 1 and position.is_long:
-                trade = Trade(position.entry_date, position.entry_price, position.quantity, position.signal_low)
-                trade.close(current_date, close_price, "回测结束强制平仓")
-                trades.append(trade)
-                cash += (position.quantity * close_price)
-                equity_curve[-1] = (current_date, cash)
-
-        result = self._calculate_metrics(trades, equity_curve, initial_capital)
-        result.signals = signals
-        return result
-
-def print_backtest_report(result: BacktestResult, stock_code: str = ""):
-    """保持向后兼容的打印函数"""
-    temp_strategy = MomentumBreakoutStrategy()
-    temp_strategy.print_report(result, stock_code)

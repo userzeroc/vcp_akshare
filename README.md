@@ -1,73 +1,76 @@
-# Quant Trading System Architecture
+# VCP AKShare 量化交易平台
 
-本项目是一个基于 `Tushare` 与 `PostgreSQL` 的本地化量化交易及数据统一处理平台，注重**高内聚低耦合**，实现了数据层、策略层与执行层（回测与实盘）的分离。
+本项目是一个基于 `Tushare` 与 `PostgreSQL` 的本地化量化交易及回测平台。经过重构优化，系统实现了**信号生成与执行逻辑的彻底解耦**，支持高度可配置的 A 股策略研究。
 
-## 一、 系统架构图与模块划分
+## 一、 系统架构
+
+项目遵循模块化设计，确保各层级职责清晰，易于扩展：
 
 ```text
 src/
-├── config/                 # 配置中心 (管理 Tushare token、PostgreSql 账号及环境变量等)
+├── config/                 # 配置中心 (Tushare Token, 数据库连接等)
 ├── data/                   # 数据管理模块 (Data Layer)
-│   ├── fetchers/           # 对接 Tushare 高频、低频数据的抓取层引擎
-│   ├── storage/            # 数据清洗、合并及 PostgreSQL 的入库管理机制
-│   └── sync/               # 增量及定时同步数据的脚本、Cron Job
-├── database/               # 数据库持久层 (Database Layer)
-│   ├── migrations/         # 数据库表结构变更及迁移 (Alembic)
-│   └── models/             # SQLAlchemy ORM 数据模型定义
+│   ├── fetchers/           # Tushare 数据抓取引擎
+│   ├── reader/             # 统一数据读取器 (ORM-to-DataFrame)
+│   ├── storage/            # 数据清洗与 PostgreSQL 入库 (Upsert 引擎)
+│   └── sync/               # 数据同步脚本 (全量/每日增量)
+├── database/               # 数据库持久层 (SQLAlchemy ORM)
+│   └── models/             # 数据库模型 (每日行情、复权因子、交易日历等)
 ├── strategy/               # 策略管理模块 (Strategy Layer)
-│   ├── instances/          # 具体的实战或实验策略 (如截面因子、动量策略、均值回归)
-│   └── ...                 # 策略基类和公共指标库计算
+│   ├── base.py             # 策略基类 (定义 Signal 接口)
+│   ├── factory.py          # 策略工厂 (含参数校验与配置注入)
+│   ├── manager.py          # 配置文件管理器
+│   ├── vcp_strategy.py     # VCP 波动收缩策略实现
+│   └── momentum_breakout.py# 动量突破策略实现
 ├── backtest/               # 回测引擎模块 (Backtest Engine)
-│   ├── engine/             # 负责事件驱动或向量化驱动的回测核心机制
-│   ├── metrics/            # 回测指标分析 (夏普比率、最大回撤、盈亏比等记录与计算)
-│   └── reports/            # 交易明细、资金曲线可视化与结果输出
-├── trade/                  # 虚实盘交易模块 (Trading Layer)
-│   ├── broker/             # 券商实盘接口适配器或模拟盘网关
-│   └── portfolio/          # 聚合账户持仓管理、基础风控校验模块
-└── utils/                  # 辅助工具模块
-    ├── logger.py           # 统一日志打印配置
-    └── helpers.py          # 通用函数 (如节假日与交易日判断，日期格式化)
+│   ├── engine/             # 通用事件驱动回测核心逻辑
+│   ├── metrics/            # 性能指标计算 (收益率、回撤、胜率等)
+│   └── reports/            # 报表输出与可视化
+│   ├── run_vcp_backtest.py # VCP 独立运行器
+│   └── run_momentum_breakout.py # 动量独立运行器
+├── analysis/               # 分析工具 (波动检测器、价格工具等)
+└── tools/
+    └── scanner.py          # 全市场/多股策略扫描分析工具
 ```
 
-## 二、 核心技术栈 (Technology Stack)
+## 二、 核心特性
 
-- **环境与配置**: `python-dotenv`, `pydantic`
-- **金融数据源**: `Tushare Pro`
-- **数据处理引擎**: `Pandas`, `Numpy`
-- **关系型数据库**: `PostgreSQL`
-- **ORM 框架**: `SQLAlchemy` 2.x
-- **数据库迁移**: `Alembic`
-- **潜在回测库**: 考虑自研回测引擎或接头 `Backtrader`/`Zipline`
+- **策略/引擎分离**: 策略子类仅负责 `check_buy` / `check_sell` 信号逻辑，回测引擎 `BacktestEngine` 统管资金、仓位与权益曲线计算。
+- **配置驱动 (Config-Driven)**: 允许在 `configs/stock_strategies.json` 中为不同个股定制参数，工厂模式自动注入并进行参数校验。
+- **高效数据流**: `StockReader` 提供高性能的本地数据加载，支持前/后复权转换，内部优化了 ORM 到 DataFrame 的转换过程。
+- **A 股本地化**: 内置 T+1 交易模拟、时间止损（A 股特供）、财报季规避等符合 A 股实战逻辑的特性。
 
-## 三、 数据流转路径 (Data Workflow)
+## 三、 快速上手
 
-1. **获取**: `src/data/fetchers` 调用 Tushare API 拉取 DataFrame 格式的行情或基本面数据。
-2. **清洗入库**: 交由 `src/data/storage` 模块通过 `pandas.to_sql` 或 SQLAlchemy ORM 模型对齐格式后批量灌入 PostgreSQL。
-3. **日常更新**: `src/data/sync` 内置相关脚本做每日收盘后的增量拉取任务。
-4. **回测/实盘消费**: `strategy` 内通过引入 `database.models` 来构建 query 抓取全量本地数据来生成买卖信号，并通过 `backtest.engine` 执行回测模拟。
+### 1. 环境配置
+```bash
+pip install -r requirements.txt
+cp .env.example .env  # 填入 TUSHARE_TOKEN 和 DB 连接信息
+```
 
-## 四、 快速启动指引
+### 2. 数据同步
+同步近三年行情数据：
+```bash
+python sync_recent_3y.py
+```
 
-1. **安装依赖**
-   请在虚拟环境下执行以下命令安装相关的基础库：
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 3. 运行回测
+修改 `src/main.py` 中的目标股票和策略，直接运行：
+```bash
+python -m src.main
+```
+或者运行独立的策略回测器：
+```bash
+python -m src.backtest.run_vcp_backtest --stock 600089.SH
+```
 
-2. **环境变量配置**
-   复制 `.env.example` 为 `.env` 然后填入你的实际参数：
-   ```bash
-   cp .env.example .env
-   ```
-   里面包含你个人的 Tushare Token 以及 PostgreSQL 数据库的登录用户与口令。
+### 4. 实时信号扫描
+扫描多只股票是否触发 VCP 买入信号：
+```bash
+python -m src.tools.scanner --codes 600089.SH,601012.SH --strategy vcp
+```
 
-3. **测试配置文件**
-   在脚本中仅需如下导入即可安全获取凭证信息：
-   ```python
-   from src.config import settings
-   
-   print("Tushare Token is:", settings.tushare.token)
-   print("DB URL is:", settings.db.database_url)
-   ```
-## 五、 策略说明文档
-- [动量突破策略 v2.0 规格说明书](docs/momentum_breakout_v2.md)
+## 四、 核心文档
+- [策略详细配置与使用指南](docs/STRATEGY_GUIDE.md)
+- [动量突破 v2.0 说明](docs/momentum_breakout_v2.md)
+- [VCP 分析报告示例](docs/vcp_analysis_report.md)

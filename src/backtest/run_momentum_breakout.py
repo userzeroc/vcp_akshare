@@ -16,11 +16,10 @@ import argparse
 import pandas as pd
 
 from src.data.reader import StockReader
-from src.strategy.momentum_breakout import (
-    MomentumBreakoutStrategy,
-    print_backtest_report,
-    BacktestResult,
-)
+from src.strategy.factory import StrategyFactory
+from src.strategy.base import BacktestResult
+from src.backtest.engine import BacktestEngine
+from src.backtest.reports import print_report
 
 
 def load_stock_data(
@@ -78,8 +77,10 @@ def run_backtest(
 ) -> BacktestResult:
     """运行回测"""
     
-    # 创建策略实例
-    strategy = MomentumBreakoutStrategy(
+    # 通过工厂创建策略实例（自动加载个股配置参数）
+    strategy = StrategyFactory.create(
+        "Momentum",
+        ts_code=stock_code,
         ma_long_period=ma_long_period,
         ma_short_period=ma_short_period,
         min_pct_chg=min_pct_chg,
@@ -115,11 +116,10 @@ def run_backtest(
     print(f"   [v2.0] ATR追踪止盈: {'启用' if use_trailing_stop else '禁用'} (倍数={atr_multiplier})")
     
     print("\n⏳ 回测运行中...")
-    result = strategy.run(df, initial_capital, earnings_dates)
+    engine = BacktestEngine(initial_capital=initial_capital, debug=True)
+    result = engine.run(strategy, df, earnings_dates=earnings_dates)
     
     return result
-
-
 
 
 def export_trades_to_csv(result: BacktestResult, output_path: str):
@@ -201,8 +201,7 @@ def main():
     )
     
     # 打印报告
-    print_backtest_report(result, args.stock)
-    
+    print_report(result, args.stock)
     
     # 导出交易明细
     csv_path = os.path.join(args.output_dir, f"trades_detail_{args.stock.replace('.', '_')}.csv")

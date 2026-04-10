@@ -66,104 +66,95 @@ class BacktestResult:
 
 class BaseStrategy(ABC):
     """
-    策略基类，标准化所有策略的接口与评估逻辑
+    策略基类 — 定义策略与回测引擎之间的标准接口。
+
+    策略子类需要实现以下方法：
+      - calculate_indicators(df)   : 计算技术指标
+      - get_warmup_period()        : 返回指标计算所需的预热期长度
+      - check_buy(row, df, i)      : 检查买入条件
+      - check_sell(row, position)  : 检查卖出条件
+
+    可选覆盖：
+      - reset_state()  : 重置策略内部状态（如计数器）
+      - on_buy()       : 买入后回调
+      - on_sell()      : 卖出后回调
+
+    回测执行：
+      使用 BacktestEngine.run(strategy, df) 运行回测，
+      或调用 strategy.run(df)（向后兼容，内部委托给 BacktestEngine）。
     """
     
     @abstractmethod
-    def _calculate_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
-        """计算策略所需指标"""
+    def calculate_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
+        """计算策略所需指标，返回已添加指标列的 DataFrame"""
         pass
 
     @abstractmethod
-    def run(self, df: pd.DataFrame, initial_capital: float = 1000000.0, debug: bool = True) -> BacktestResult:
-        """运行回测的主循环"""
+    def get_warmup_period(self) -> int:
+        """返回指标计算所需的预热期长度（交易日数）"""
         pass
 
-    def _calculate_metrics(
-        self,
-        trades: List[Trade],
-        equity_curve: List[Tuple[date, float]],
-        initial_capital: float
-    ) -> BacktestResult:
-        """计算标准化的性能指标 (DRY原则)"""
-        result = BacktestResult()
-        result.trades = trades
-        result.equity_curve = equity_curve
-        
-        if not trades:
-            return result
-        
-        result.total_trades = len(trades)
-        winning_trades = [t for t in trades if t.pnl > 0]
-        losing_trades = [t for t in trades if t.pnl <= 0]
-        result.winning_trades = len(winning_trades)
-        result.losing_trades = len(losing_trades)
-        
-        result.win_rate = len(winning_trades) / len(trades) * 100 if trades else 0
-        result.avg_win = np.mean([t.pnl for t in winning_trades]) if winning_trades else 0
-        result.avg_loss = np.mean([t.pnl for t in losing_trades]) if losing_trades else 0
-        
-        if result.avg_loss != 0:
-            result.profit_loss_ratio = abs(result.avg_win / result.avg_loss)
-        else:
-            result.profit_loss_ratio = float('inf') if winning_trades else 0
-        
-        final_value = equity_curve[-1][1] if equity_curve else initial_capital
-        result.total_return = (final_value - initial_capital) / initial_capital * 100
-        
-        # 计算年化
-        if len(equity_curve) >= 2:
-            days = (equity_curve[-1][0] - equity_curve[0][0]).days
-            years = days / 365.25
-            if years > 0 and final_value > 0 and initial_capital > 0:
-                result.annualized_return = ((final_value / initial_capital) ** (1 / years) - 1) * 100
-        
-        # 最大回撤
-        peak = initial_capital
-        max_dd = 0
-        max_dd_pct = 0
-        for _, value in equity_curve:
-            if value > peak:
-                peak = value
-            dd = peak - value
-            dd_pct = dd / peak * 100 if peak > 0 else 0
-            if dd > max_dd:
-                max_dd = dd
-                max_dd_pct = dd_pct
-        result.max_drawdown = max_dd
-        result.max_drawdown_pct = max_dd_pct
-        
-        return result
+    @abstractmethod
+    def check_buy(self, row: pd.Series, df: pd.DataFrame, i: int, **kwargs) -> Tuple[bool, Optional[float], str]:
+        """
+        检查买入条件。
 
-    def print_report(self, result: BacktestResult, stock_info: str = ""):
-        """打印标准回测报告"""
-        final_value = result.equity_curve[-1][1] if result.equity_curve else 1000000.0
-        
-        print("\n" + "=" * 70)
-        print(f"  📊 Strategy Backtest Report: {stock_info}")
-        print("=" * 70)
-        
-        print(f"\n[ Performance Summary ]")
-        print(f"  Final Equity:          {final_value:,.2f}")
-        print(f"  Total Return:          {result.total_return:.2f}%")
-        print(f"  Annualized Return:     {result.annualized_return:.2f}%")
-        print(f"  Max Drawdown:          {result.max_drawdown:,.2f} ({result.max_drawdown_pct:.2f}%)")
-        
-        print(f"\n[ Trading Statistics ]")
-        print(f"  Total Trades:          {result.total_trades}")
-        print(f"  Winning Trades:        {result.winning_trades} ({result.win_rate:.1f}%)")
-        print(f"  Profit/Loss Ratio:     {result.profit_loss_ratio:.2f}")
-        print(f"  Avg Win/Loss:          {result.avg_win:,.0f} / {result.avg_loss:,.0f}")
-        
-        if result.trades:
-            print(f"\n[ Trade Details ]")
-            print("-" * 70)
-            print(f"{'Entry Date':<12} {'Entry':>8} {'Exit Date':<12} {'Exit':>8} {'PnL%':>8} {'Reason'}")
-            print("-" * 70)
-            for t in result.trades:
-                entry_str = str(t.entry_date)
-                exit_str = str(t.exit_date)
-                pct_str = f"{t.pnl_pct:+.1f}%"
-                print(f"{entry_str:<12} {t.entry_price:>8.2f} {exit_str:<12} {t.exit_price:>8.2f} {pct_str:>8} {t.exit_reason[:20]}")
-            print("-" * 70)
-        print("=" * 70 + "\n")
+        参数:
+            row  - 当日行情数据
+            df   - 完整 DataFrame（可用于回溯历史数据）
+            i    - 当前行索引
+
+        返回:
+            (是否触发买入, 买入价格, 买入原因)
+        """
+        pass
+
+    @abstractmethod
+    def check_sell(self, row: pd.Series, position: Position, **kwargs) -> Tuple[bool, str]:
+        """
+        检查卖出条件。
+
+        参数:
+            row      - 当日行情数据
+            position - 当前持仓状态
+
+        返回:
+            (是否触发卖出, 卖出原因)
+        """
+        pass
+
+    def reset_state(self):
+        """重置策略内部状态（每次回测开始前调用）"""
+        pass
+
+    def on_buy(self, current_date: date):
+        """买入后回调，子类可覆盖"""
+        pass
+
+    def on_sell(self, current_date: date):
+        """卖出后回调，子类可覆盖"""
+        pass
+
+    # ------------------------------------------------------------------
+    # 向后兼容：strategy.run(df) 委托给 BacktestEngine
+    # ------------------------------------------------------------------
+
+    def run(self, df: pd.DataFrame, initial_capital: float = 1000000.0, debug: bool = True, **kwargs) -> BacktestResult:
+        """
+        运行回测（向后兼容接口）。
+
+        内部委托给 BacktestEngine，无需子类覆盖。
+        """
+        from src.backtest.engine import BacktestEngine
+        engine = BacktestEngine(initial_capital=initial_capital, debug=debug)
+        return engine.run(self, df, **kwargs)
+
+    # ------------------------------------------------------------------
+    # 向后兼容：strategy.print_report()
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def print_report(result: BacktestResult, stock_info: str = ""):
+        """打印标准回测报告（委托给 backtest.reports 模块）"""
+        from src.backtest.reports import print_report
+        print_report(result, stock_info)

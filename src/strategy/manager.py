@@ -1,7 +1,11 @@
 
 import json
+import logging
 import os
 from typing import Dict, Any, Optional
+
+logger = logging.getLogger(__name__)
+
 
 class StrategyManager:
     """
@@ -16,14 +20,14 @@ class StrategyManager:
     def _load_configs(self) -> Dict[str, Any]:
         """加载 JSON 配置文件"""
         if not os.path.exists(self.config_path):
-            print(f"提示: 配置文件 {self.config_path} 不存在，将使用策略默认参数。")
+            logger.info("配置文件 %s 不存在，将使用策略默认参数。", self.config_path)
             return {}
         
         try:
             with open(self.config_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"错误: 加载配置文件失败: {e}")
+            logger.error("加载配置文件失败: %s", e)
             return {}
 
     def get_stock_params(self, ts_code: str, strategy_name: str) -> Dict[str, Any]:

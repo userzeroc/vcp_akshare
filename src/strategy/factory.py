@@ -1,9 +1,15 @@
 
+import inspect
+import logging
 from typing import Type, Any, Dict
+
 from .base import BaseStrategy
 from .vcp_strategy import VCPStrategy
 from .momentum_breakout import MomentumBreakoutStrategy
 from .manager import StrategyManager
+
+logger = logging.getLogger(__name__)
+
 
 class StrategyFactory:
     """
@@ -33,10 +39,7 @@ class StrategyFactory:
         if not strategy_class:
             raise ValueError(f"未知策略类型: {strategy_name}. 可用类型: {list(cls._STRATEGY_MAP.keys())}")
         
-        # 1. 获取默认参数 (从类定义中提取，暂时通过实例化一个空的再更新，
-        # 或是直接依赖 Python 的关键字参数解包机制)
-        
-        # 2. 获取个股定制参数 (从配置文件)
+        # 1. 获取个股定制参数 (从配置文件)
         custom_params = {}
         if ts_code:
             custom_params = cls._manager.get_stock_params(ts_code, strategy_name)
@@ -45,12 +48,22 @@ class StrategyFactory:
                 full_name = strategy_class.__name__
                 custom_params = cls._manager.get_stock_params(ts_code, full_name)
         
-        # 3. 合并参数优先级: 手动传入 > 配置文件 > 类默认值
+        # 2. 合并参数优先级: 手动传入 > 配置文件 > 类默认值
         final_params = {**custom_params, **kwargs}
         
-        print(f"🛠️ [Factory] 实例化 {strategy_class.__name__} (股票: {ts_code if ts_code else 'N/A'})")
+        # 3. 校验参数合法性：防止拼写错误的参数被静默忽略
+        if final_params:
+            valid_params = set(inspect.signature(strategy_class.__init__).parameters.keys()) - {'self'}
+            invalid_keys = set(final_params.keys()) - valid_params
+            if invalid_keys:
+                raise ValueError(
+                    f"策略 {strategy_class.__name__} 配置中存在未知参数: {invalid_keys}. "
+                    f"合法参数: {sorted(valid_params)}"
+                )
+        
+        logger.info("实例化 %s (股票: %s)", strategy_class.__name__, ts_code or 'N/A')
         if custom_params:
-            print(f"   注入配置参数: {custom_params}")
+            logger.info("  注入配置参数: %s", custom_params)
             
         return strategy_class(**final_params)
 

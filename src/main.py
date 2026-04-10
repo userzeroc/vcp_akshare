@@ -1,11 +1,14 @@
 import sys
 import os
+import logging
 
 # 1. 环境准备：确保能找到 src 目录
 sys.path.append(os.getcwd())
 
 from src.data.reader.stock_reader import StockReader
 from src.strategy.factory import StrategyFactory
+from src.backtest.engine import BacktestEngine
+from src.backtest.reports import print_report
 
 def run_backtest(ts_code: str, strategy_name: str):
     """
@@ -26,14 +29,17 @@ def run_backtest(ts_code: str, strategy_name: str):
     # 工厂会自动检查 configs/stock_strategies.json 是否有该个股的定制参数
     strategy = StrategyFactory.create(strategy_name, ts_code=ts_code)
 
-    # [步骤 3] 运行回测并打印报告
+    # [步骤 3] 通过 BacktestEngine 运行回测
     print(f"开始运行 {strategy_name} 回测流程...")
-    result = strategy.run(df, debug=True) # debug=True 会打印每日买卖日志
+    engine = BacktestEngine(initial_capital=1000000.0, debug=True)
+    result = engine.run(strategy, df)
     
-    # 使用基类提供的标准化报表方法
-    strategy.print_report(result, stock_info=f"{ts_code} ({strategy_name})")
+    # [步骤 4] 使用标准化报表
+    print_report(result, stock_info=f"{ts_code} ({strategy_name})")
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    
     # 您只需修改这里即可测试不同股票
     target_stock = "601899.SH"
     target_strategy = "VCP"

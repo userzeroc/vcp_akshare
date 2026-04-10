@@ -10,8 +10,9 @@ import argparse
 import pandas as pd
 from datetime import datetime
 from src.data.reader import StockReader
-from src.strategy.vcp_strategy import VCPStrategy
-from src.strategy.momentum_breakout import print_backtest_report
+from src.strategy.factory import StrategyFactory
+from src.backtest.engine import BacktestEngine
+from src.backtest.reports import print_report
 
 def run_backtest(
     stock_code: str,
@@ -39,8 +40,10 @@ def run_backtest(
     print(f"✅ 数据加载完成: {len(df)} 条记录 (含预热期)")
     print(f"   回测区间: {start_date} ~ {end_date}")
     
-    # 2. 初始化策略
-    strategy = VCPStrategy(
+    # 2. 通过工厂初始化策略（自动加载个股配置参数）
+    strategy = StrategyFactory.create(
+        "VCP",
+        ts_code=stock_code,
         last_t_depth=last_t_depth,
         vol_exhaust_ratio=vol_exhaust_ratio,
         time_stop_days=3
@@ -53,13 +56,11 @@ def run_backtest(
     print(f"   时间止损: {strategy.time_stop_days}日")
     
     print("\n⏳ 回测运行中...")
-    result = strategy.run(df, initial_capital, debug=True)
-    
-    # 过滤掉预热期的数据结果 (如果结果包含整个df)
-    # 此处 strategy.run 返回的 trades 已经包含了日期，所以 metrics 计算没问题
+    engine = BacktestEngine(initial_capital=initial_capital, debug=True)
+    result = engine.run(strategy, df)
     
     # 3. 打印分析报告
-    print_backtest_report(result, stock_code)
+    print_report(result, stock_code)
     
     return result, df
 
