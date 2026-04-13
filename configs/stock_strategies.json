@@ -22,7 +22,12 @@
   },
   "603993.SH": {
     "VCPStrategy": {
-      "setup_ready_days": 7
+      "setup_ready_days": 10,
+      "last_t_depth": 0.12,
+      "vol_exhaust_ratio": 0.6,
+      "resonance_threshold": 0.5,
+      "time_stop_days": 3,
+      "hard_stop_loss": -8.0
     }
   }
 }

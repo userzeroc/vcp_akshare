@@ -22,7 +22,7 @@ from src.analysis import (
 if __name__ == "__main__":
     # ── 1. 获取数据 ────────────────────────────────────────────────────────
     reader = StockReader()
-    stock_code = "600089.SH"
+    stock_code = "002475.SZ"
     df_raw = reader.get_daily_adj(stock_code, "20200101", "20260101", mode="qfq")
 
     # ── 2. 预处理 ──────────────────────────────────────────────────────────

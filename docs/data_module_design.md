@@ -25,6 +25,7 @@ src/data/
 |------|------|--------|
 | `fetchers` | 从 Tushare 获取原始数据 | API、限流、重试 |
 | `storage` | 清洗数据格式 + 幂等写入数据库 | 清洗、UPSERT、事务 |
+| `reader` | 统一数据查询接口，供策略消费 | 复权计算、ORM-to-DFS 优化 |
 | `sync` | 编排同步策略（何时、同步什么） | 增量、全量、手动 |
 
 ---
@@ -181,20 +182,35 @@ python -m src.data.sync.daily_sync
 
 **用途**：单独同步或修复某一只（或几只）股票的历史数据，不必执行全市场更新。
 
-**使用方式：**
-```python
-from src.data.sync.manual_sync import sync_single_stock
+---
 
-# 代码调用
-sync_single_stock("000001.SZ", "20200101", "20240101")
+## 5. 数据读取层 (`reader/`)
 
-# 或命令行
-python -m src.data.sync.manual_sync
-```
+### 5.1 StockReader — 统一读取入口
+
+**文件**: `src/data/reader/stock_reader.py`
+
+**职责**：
+- **解耦数据库模型**：策略不需要知道 SQLAlchemy 模型细节，直接获取清洗好的 DataFrame。
+- **高效转换**：内置 `_orm_to_dataframe()` 方法，统一处理 Decimal 到 float 的转换及空值处理。
+- **自动复权 (Adjustment)**：封装了复杂的复权因子计算逻辑，提供 `get_daily_adj` 接口。
+
+**复权支持：**
+- `qfq` (前复权)：以当前价格为基准，向下平移历史价格。
+- `hfq` (后复权)：以初始价格为基准，向上平移后续价格。
+
+**核心方法：**
+| 方法 | 返回数据 |
+|------|----------|
+| `get_daily()` | 原始日线行情 |
+| `get_daily_adj()` | **[推荐]** 经过复权处理的日线行情 |
+| `get_cross_section()` | 某一交易日的全市场截面数据 |
+| `get_stock_list()` | 股票基础信息列表 |
+| `get_trade_cal()` | 交易日历查询 |
 
 ---
 
-## 5. 完整数据流图
+## 6. 完整数据流图
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

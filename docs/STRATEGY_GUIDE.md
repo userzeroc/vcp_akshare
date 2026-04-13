@@ -1,15 +1,17 @@
-# 📈 策略配属与使用说明文档
+# 📈 策略配置与使用说明文档
 
-本文档详细介绍了当前系统中实现的 **VCP (波动收缩)** 与 **能量突破 (Momentum)** 策略的参数配置、逻辑细节及定制化方法。
+本文档详细介绍了系统中实现的 **VCP (波动收缩)** 与 **动量突破 (Momentum)** 策略的架构设计、参数配置及定制化方法。
 
 ---
 
 ## 1. 核心架构设计
 
-系统采用了 **配置驱动 (Config-Driven)** 的工厂模式，实现了逻辑与参数的彻底分离：
-- **基类 (`BaseStrategy`)**: 统一了所有策略的回测循环、资金管理及性能评估算法。
-- **配置管理器 (`StrategyManager`)**: 自动加载 `configs/stock_strategies.json` 中的定制参数。
-- **策略工厂 (`StrategyFactory`)**: 根据股票代码自动注入参数并实例化策略。
+系统采用了 **信号与执行分离 (Signal-Engine Decoupling)** 的设计模式，实现了逻辑与执行、逻辑与参数的彻底分离：
+
+- **信号层 (`Strategy`)**: 策略类（如 `VCPStrategy`）仅负责计算技术指标并生成买卖信号（`check_buy` / `check_sell`）。
+- **执行层 (`BacktestEngine`)**: 统一处理回测循环、资金管理（仓位计算）、订单执行及权益曲线生成。
+- **基类 (`BaseStrategy`)**: 定义了标准信号接口，确保所有策略能无缝对接到回测引擎。
+- **配置驱动 (`StrategyFactory`)**: 根据股票代码自动从 `configs/stock_strategies.json` 加载定制参数，并在实例化前进行校验。
 
 ---
 
@@ -49,26 +51,26 @@
 
 ## 4. 如何定制个股参数？
 
-您无需修改任何 Python 代码，只需编辑 [configs/stock_strategies.json](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/configs/stock_strategies.json) 即可为特定股票定制“股性”参数。
+您无需修改策略代码，只需编辑 `configs/stock_strategies.json` 即可为特定股票定制“股性”参数。
 
-### 优先级顺序
+### 校验机制
+`StrategyFactory` 具备严苛的**参数校验**功能。如果在配置文件中写错了参数名（Typo），系统会在启动时抛出错误，防止错误的参数被静默忽略。
+
+### 参数优先级
 `手动传入参数 (kwargs)` > `JSON 配置文件参数` > `策略类默认参数`
-
-### JSON 配置示例
-```json
-{
-  "601899.SH": {
-    "VCPStrategy": {
-      "vol_exhaust_ratio": 0.7  // 针对紫金矿业调宽地量门槛
-    }
-  }
-}
-```
 
 ---
 
-## 5. 快速运行
+## 5. 运行回测与扫描
 
-使用根目录下的 [src/main.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/main.py) 进行回测。
+### 5.1 单股回测
+使用 [src/main.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/main.py) 定义目标标的并运行。
 
-*提示：您可以根据需要修改 `main.py` 中的 `target_stock` 和 `target_strategy`。*
+### 5.2 全市场/多股扫描
+使用扫描器检查最新交易日信号：
+```bash
+python -m src.tools.scanner --codes 600089.SH,601012.SH --strategy vcp
+```
+
+### 5.3 结果分析
+系统会自动生成包含夏普比率、最大回撤等指标的报表。您可以查看 `backtest/reports/` 模块了解具体的指标定义。
