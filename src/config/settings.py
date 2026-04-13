@@ -28,6 +28,8 @@ class DatabaseConfig:
 @dataclass
 class TushareConfig:
     token: str = os.getenv("TUSHARE_TOKEN", "")
+    # 可选：自定义 HTTP 代理地址 (用于绕过频率限制或网络加速)
+    http_url: str = os.getenv("TUSHARE_HTTP_URL", "")
 
 @dataclass
 class Settings:

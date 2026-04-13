@@ -48,10 +48,26 @@ pip install -r requirements.txt
 cp .env.example .env  # 填入 TUSHARE_TOKEN 和 DB 连接信息
 ```
 
+#### Tushare 代理配置 (可选)
+如果需要通过代理或 Cloudflare Workers 访问 Tushare，请在 `.env` 中设置 `TUSHARE_HTTP_URL`：
+```env
+TUSHARE_HTTP_URL=https://your-proxy-url.workers.dev
+```
+> [!WARNING]
+> 使用动态 IP 代理（如某些 Workers）可能会触发 Tushare 的 **IP 数量超限** 限制。如果遇到该错误，建议切换回官方直连模式或增加请求间隔。
+
 ### 2. 数据同步
-同步近三年行情数据：
+首次运行需初始化基础数据（交易日历、股票列表）：
 ```bash
-python sync_recent_3y.py
+python -m src.data.sync.init_foundation
+```
+或者同步特定个股/指数的历史数据：
+```bash
+python -m src.data.sync.manual_sync
+```
+日常增量更新：
+```bash
+python -m src.data.sync.daily_sync
 ```
 
 ### 3. 运行回测
