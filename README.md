@@ -87,6 +87,9 @@ python -m src.tools.scanner --codes 600089.SH,601012.SH --strategy vcp
 ```
 
 ## 四、 核心文档
+- [📖 系统详细技术文档](docs/detailed_documentation.md)
+- [🚀 优化策略与开发计划](docs/optimization_plan.md)
 - [策略详细配置与使用指南](docs/STRATEGY_GUIDE.md)
+- [Data 模块设计文档](docs/data_module_design.md)
 - [动量突破 v2.0 说明](docs/momentum_breakout_v2.md)
 - [VCP 分析报告示例](docs/vcp_analysis_report.md)
