@@ -10,6 +10,9 @@ from .trade_cal import TradeCal
 from .stock_basic import StockBasic
 from .stock_daily import StockDaily
 from .adj_factor import AdjFactor
+from .index_daily import IndexDaily
+from .daily_basic import DailyBasic
+from .industry_member import IndustryMember
 
 __all__ = [
     "Base",
@@ -17,4 +20,7 @@ __all__ = [
     "StockBasic",
     "StockDaily",
     "AdjFactor",
+    "IndexDaily",
+    "DailyBasic",
+    "IndustryMember",
 ]
