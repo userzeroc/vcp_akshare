@@ -12,8 +12,9 @@ SQLAlchemy>=2.0.0
 psycopg2-binary>=2.9.0 # PostgreSQL 异步可考虑 asyncpg，目前使用同步
 alembic>=1.13.0        # 数据库迁移工具
 
-# 回测辅助与其它生态（根据后续扩展可能需要）
-# backtrader>=1.9.78
+# 回测引擎
+vectorbt>=0.26.0              # 向量化回测框架（免费开源版）
+# backtrader>=1.9.78          # 备用：事件驱动引擎（已暂停维护）
 
 # 可视化、统计分析与扩展数据源
 akshare>=1.18.0
