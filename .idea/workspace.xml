@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5ad3e7c2-b061-40f8-b07f-65caea0664a4" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backtest/run_vbt_momentum.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtest/run_vbt_momentum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backtest/run_vbt_vcp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtest/run_vbt_vcp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backtest/run_vcp_backtest.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backtest/run_vcp_backtest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,28 +37,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.demo.executor&quot;: &quot;Run&quot;,
-    &quot;Python.lab.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.manual_sync.executor&quot;: &quot;Run&quot;,
-    &quot;Python.retry_stock_basic.executor&quot;: &quot;Run&quot;,
-    &quot;Python.scanner.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sync_recent_3y.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;实验性策略&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.demo.executor": "Run",
+    "Python.lab.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.manual_sync.executor": "Run",
+    "Python.retry_stock_basic.executor": "Run",
+    "Python.run_momentum_breakout.executor": "Run",
+    "Python.run_vbt_momentum.executor": "Run",
+    "Python.run_vbt_vcp.executor": "Run",
+    "Python.run_vcp_backtest.executor": "Run",
+    "Python.scanner.executor": "Run",
+    "Python.sync_recent_3y.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "实验性策略",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.tools",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Python.main">
+}]]></component>
+  <component name="RunManager">
     <configuration name="demo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="vcp_akshare" />
       <option name="ENV_FILES" value="" />
@@ -135,6 +142,7 @@
       <workItem from="1775698953307" duration="965000" />
       <workItem from="1776071526630" duration="643000" />
       <workItem from="1776220610193" duration="3084000" />
+      <workItem from="1776243105948" duration="2696000" />
     </task>
     <servers />
   </component>
@@ -142,12 +150,16 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/vcp_akshare$run_vcp_backtest.coverage" NAME="run_vcp_backtest 覆盖结果" MODIFIED="1776244046390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/backtest" />
     <SUITE FILE_PATH="coverage/vcp_akshare$lab.coverage" NAME="lab 覆盖结果" MODIFIED="1775572719011" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lab" />
+    <SUITE FILE_PATH="coverage/vcp_akshare$run_vbt_vcp.coverage" NAME="run_vbt_vcp 覆盖结果" MODIFIED="1776243884616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/backtest" />
+    <SUITE FILE_PATH="coverage/vcp_akshare$run_momentum_breakout.coverage" NAME="run_momentum_breakout 覆盖结果" MODIFIED="1776243926242" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/backtest" />
     <SUITE FILE_PATH="coverage/vcp_akshare$scanner.coverage" NAME="scanner 覆盖结果" MODIFIED="1775808889399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/tools" />
     <SUITE FILE_PATH="coverage/vcp_akshare$manual_sync.coverage" NAME="manual_sync 覆盖结果" MODIFIED="1775742853174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/data/sync" />
     <SUITE FILE_PATH="coverage/vcp_akshare$demo.coverage" NAME="demo 覆盖结果" MODIFIED="1775811730720" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lab" />
     <SUITE FILE_PATH="coverage/vcp_akshare$retry_stock_basic.coverage" NAME="retry_stock_basic 覆盖结果" MODIFIED="1776071551260" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scratch" />
     <SUITE FILE_PATH="coverage/vcp_akshare$main.coverage" NAME="main 覆盖结果" MODIFIED="1775656445415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/vcp_akshare$sync_recent_3y.coverage" NAME="sync_recent_3y 覆盖结果" MODIFIED="1775806600989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/vcp_akshare$run_vbt_momentum.coverage" NAME="run_vbt_momentum 覆盖结果" MODIFIED="1776244058506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/backtest" />
   </component>
 </project>

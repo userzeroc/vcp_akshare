@@ -178,8 +178,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="VCP 策略 VectorBT 回测")
     parser.add_argument("--stock",    type=str,   default="600089.SH", help="股票代码")
-    parser.add_argument("--start",    type=str,   default="20220101",  help="开始日期 YYYYMMDD")
-    parser.add_argument("--end",      type=str,   default="20231231",  help="结束日期 YYYYMMDD")
+    parser.add_argument("--start",    type=str,   default="20210101",  help="开始日期 YYYYMMDD")
+    parser.add_argument("--end",      type=str,   default="20251231",  help="结束日期 YYYYMMDD")
     parser.add_argument("--capital",  type=float, default=1_000_000.0, help="初始资金")
     parser.add_argument("--depth",    type=float, default=0.08,        help="波幅收缩阈值")
     parser.add_argument("--vol-ratio",type=float, default=0.40,        help="地量倍数")

@@ -190,7 +190,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="动量突破策略 VectorBT 回测")
     parser.add_argument("--stock",      type=str,   default="600089.SH", help="股票代码")
     parser.add_argument("--start",      type=str,   default="20220101",  help="开始日期 YYYYMMDD")
-    parser.add_argument("--end",        type=str,   default="20231231",  help="结束日期 YYYYMMDD")
+    parser.add_argument("--end",        type=str,   default="20251231",  help="结束日期 YYYYMMDD")
     parser.add_argument("--capital",    type=float, default=1_000_000.0, help="初始资金")
     parser.add_argument("--ma60",       type=int,   default=60,          help="长期均线周期")
     parser.add_argument("--ma20",       type=int,   default=20,          help="短期均线周期")

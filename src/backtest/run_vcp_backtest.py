@@ -100,7 +100,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A股 VCP 策略回测')
     parser.add_argument('--stock', type=str, default='600089.SH', help='股票代码')
     parser.add_argument('--start', type=str, default='20200101', help='开始日期')
-    parser.add_argument('--end', type=str, default='20250401', help='结束日期')
+    parser.add_argument('--end', type=str, default='20251231', help='结束日期')
     parser.add_argument('--capital', type=float, default=1000000.0, help='初始资金')
     parser.add_argument('--depth', type=float, default=None, help='波幅收缩阈值')
     parser.add_argument('--vol-ratio', type=float, default=None, help='地量倍数')
