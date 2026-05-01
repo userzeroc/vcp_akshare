@@ -43,8 +43,9 @@ tushare_config.py
 *.log
 logs/
 
-# 数据文件
+# 数据文件与结果
 *.csv
 *.xlsx
 *.xls
 data/
+results/

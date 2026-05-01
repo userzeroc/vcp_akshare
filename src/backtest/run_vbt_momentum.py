@@ -17,9 +17,10 @@ import numpy as np
 from datetime import datetime
 
 from src.data.reader import StockReader
-from src.backtest_vbt.engine import VbtBacktestEngine
-from src.backtest_vbt.signals import momentum_signals
-from src.backtest_vbt.report import print_report, save_equity_curve, save_trades_csv, save_grid_heatmap
+from src.backtest.vbt.engine import VbtBacktestEngine
+from src.config.settings import settings
+from src.backtest.vbt.signals import momentum_signals
+from src.backtest.vbt.report import print_report, save_equity_curve, save_trades_csv, save_grid_heatmap
 
 logger = logging.getLogger(__name__)
 
@@ -199,7 +200,7 @@ if __name__ == "__main__":
     parser.add_argument("--bias",       type=float, default=0.25,        help="乖离率阈值")
     parser.add_argument("--no-trailing",action="store_true",             help="禁用 ATR 追踪止盈")
     parser.add_argument("--atr-multi",  type=float, default=2.5,         help="ATR 追踪倍数")
-    parser.add_argument("--output-dir", type=str,   default="backtest_results_vbt", help="输出目录")
+    parser.add_argument("--output-dir", type=str,   default=str(settings.paths.backtest_dir), help="输出目录")
     parser.add_argument("--grid",       action="store_true",             help="启用参数网格扫描")
     parser.add_argument("--no-html",    action="store_true",             help="不保存 HTML 权益曲线")
     parser.add_argument("--no-csv",     action="store_true",             help="不保存 CSV 交易明细")

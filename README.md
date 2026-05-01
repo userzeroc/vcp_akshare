@@ -8,29 +8,23 @@
 
 ```text
 src/
-├── config/                 # 配置中心 (Tushare Token, 数据库连接等)
-├── data/                   # 数据管理模块 (Data Layer)
-│   ├── fetchers/           # Tushare 数据抓取引擎
-│   ├── reader/             # 统一数据读取器 (ORM-to-DataFrame)
-│   ├── storage/            # 数据清洗与 PostgreSQL 入库 (Upsert 引擎)
-│   └── sync/               # 数据同步脚本 (全量/每日增量)
-├── database/               # 数据库持久层 (SQLAlchemy ORM)
-│   └── models/             # 数据库模型 (每日行情、复权因子、交易日历等)
-├── strategy/               # 策略管理模块 (Strategy Layer)
-│   ├── base.py             # 策略基类 (定义 Signal 接口)
-│   ├── factory.py          # 策略工厂 (含参数校验与配置注入)
-│   ├── manager.py          # 配置文件管理器
-│   ├── vcp_strategy.py     # VCP 波动收缩策略实现
-│   └── momentum_breakout.py# 动量突破策略实现
-├── backtest/               # 回测引擎模块 (Backtest Engine)
-│   ├── engine/             # 通用事件驱动回测核心逻辑
-│   ├── metrics/            # 性能指标计算 (收益率、回撤、胜率等)
-│   └── reports/            # 报表输出与可视化
-│   ├── run_vcp_backtest.py # VCP 独立运行器
-│   └── run_momentum_breakout.py # 动量独立运行器
-├── analysis/               # 分析工具 (波动检测器、价格工具等)
-└── tools/
-    └── scanner.py          # 全市场/多股策略扫描分析工具
+├── config/                 # 配置中心 (含 PathConfig 全局路径管理)
+├── data/                   # 数据管理模块
+├── database/               # 数据库持久层 (SQLAlchemy)
+├── strategy/               # 策略定义 (VCP, Momentum 等)
+├── backtest/               # 回测引擎模块
+│   ├── engine/             # 事件驱动核心
+│   ├── vbt/                # VectorBT 向量化回测引擎
+│   ├── metrics/            # 指标计算
+│   └── reports/            # 报表输出
+├── analysis/               # 股性分析与波段检测
+└── tools/                  # 辅助工具 (Scanner)
+
+configs/                    # 外部 JSON 配置文件
+experiments/                # 实验性脚本与研究代码 (原 lab/ scratch/)
+results/                    # 统一结果输出目录 (回测报告、CSV、HTML)
+docs/                       # 系统文档
+logs/                       # 运行日志
 ```
 
 ## 二、 核心特性

@@ -10,6 +10,7 @@ import argparse
 import pandas as pd
 from typing import Optional
 from datetime import datetime
+from src.config.settings import settings
 from src.data.reader import StockReader
 from src.strategy.factory import StrategyFactory
 from src.backtest.engine import BacktestEngine
@@ -74,7 +75,9 @@ def run_backtest(
     
     return result, df
 
-def save_vcp_results(result, df, stock_code, output_dir='backtest_results_vcp'):
+def save_vcp_results(result, df, stock_code, output_dir=None):
+    if output_dir is None:
+        output_dir = str(settings.paths.backtest_dir)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         
@@ -104,7 +107,7 @@ if __name__ == "__main__":
     parser.add_argument('--capital', type=float, default=1000000.0, help='初始资金')
     parser.add_argument('--depth', type=float, default=None, help='波幅收缩阈值')
     parser.add_argument('--vol-ratio', type=float, default=None, help='地量倍数')
-    parser.add_argument('--output-dir', type=str, default='backtest_results_vcp', help='输出目录')
+    parser.add_argument('--output-dir', type=str, default=str(settings.paths.backtest_dir), help='输出目录')
     
     args = parser.parse_args()
     

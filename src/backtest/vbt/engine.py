@@ -10,8 +10,8 @@ VbtBacktestEngine — 封装 vbt.Portfolio.from_signals
 
 Usage::
 
-    from src.backtest_vbt.engine import VbtBacktestEngine
-    from src.backtest_vbt.signals import vcp_signals
+    from src.backtest.vbt.engine import VbtBacktestEngine
+    from src.backtest.vbt.signals import vcp_signals
 
     entries, exits = vcp_signals.generate_signals(df)
     engine = VbtBacktestEngine()

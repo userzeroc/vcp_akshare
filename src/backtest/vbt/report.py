@@ -15,6 +15,7 @@ from typing import Optional
 import pandas as pd
 import vectorbt as vbt
 
+from src.config.settings import settings
 logger = logging.getLogger(__name__)
 
 
@@ -98,7 +99,7 @@ def print_report(
 def save_equity_curve(
     portfolio: vbt.Portfolio,
     stock_code: str = "",
-    output_dir: str = "backtest_results_vbt",
+    output_dir: str = str(settings.paths.backtest_dir),
     auto_open: bool = False,
 ) -> str:
     """
@@ -122,7 +123,7 @@ def save_equity_curve(
 def save_trades_csv(
     portfolio: vbt.Portfolio,
     stock_code: str = "",
-    output_dir: str = "backtest_results_vbt",
+    output_dir: str = str(settings.paths.backtest_dir),
 ) -> str:
     """将交易明细导出为 CSV。"""
     os.makedirs(output_dir, exist_ok=True)
@@ -148,7 +149,7 @@ def save_grid_heatmap(
     param_x: str,
     param_y: str,
     metric: str = "Sharpe Ratio",
-    output_dir: str = "backtest_results_vbt",
+    output_dir: str = str(settings.paths.backtest_dir),
 ) -> str:
     """
     生成参数网格热力图（Plotly，保存为 HTML）。

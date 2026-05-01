@@ -32,9 +32,25 @@ class TushareConfig:
     http_url: str = os.getenv("TUSHARE_HTTP_URL", "")
 
 @dataclass
+class PathConfig:
+    base_dir: Path = Path(__file__).resolve().parent.parent.parent
+    results_dir: Path = base_dir / "results"
+    backtest_dir: Path = results_dir / "backtest"
+    reports_dir: Path = results_dir / "reports"
+    logs_dir: Path = base_dir / "logs"
+    configs_dir: Path = base_dir / "configs"
+    
+    def ensure_dirs(self):
+        """确保必要的目录存在"""
+        for d in [self.results_dir, self.backtest_dir, self.reports_dir, self.logs_dir]:
+            d.mkdir(parents=True, exist_ok=True)
+
+@dataclass
 class Settings:
     db: DatabaseConfig = DatabaseConfig()
     tushare: TushareConfig = TushareConfig()
+    paths: PathConfig = PathConfig()
     
 # 暴露全局设置实例
 settings = Settings()
+settings.paths.ensure_dirs()

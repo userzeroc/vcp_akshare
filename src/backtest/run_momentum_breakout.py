@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 import argparse
 import pandas as pd
 
+from src.config.settings import settings
 from src.data.reader import StockReader
 from src.strategy.factory import StrategyFactory
 from src.strategy.base import BacktestResult
@@ -168,7 +169,7 @@ def main():
     parser.add_argument('--no-trailing', action='store_true', help='禁用ATR追踪止盈')
     parser.add_argument('--atr-multi', type=float, default=2.5, help='ATR追踪止盈倍数')
     
-    parser.add_argument('--output-dir', type=str, default='backtest_results', help='输出目录')
+    parser.add_argument('--output-dir', type=str, default=str(settings.paths.backtest_dir), help='输出目录')
     
     args = parser.parse_args()
     

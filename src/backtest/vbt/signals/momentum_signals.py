@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 from typing import Tuple
 
-from src.backtest_vbt.indicators import (
+from src.backtest.vbt.indicators import (
     calc_sma,
     calc_atr,
     calc_vol_ma,

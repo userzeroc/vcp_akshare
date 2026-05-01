@@ -11,6 +11,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from src.config.settings import settings
 from src.data.reader.stock_reader import StockReader
 from src.analysis.stock_personality import StockPersonalityAnalyzer
 from src.analysis.personality_config import PersonalityConfig
@@ -21,7 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description="股性分析工具")
     parser.add_argument("--ts_code", type=str, help="股票代码，如 600519.SH")
     parser.add_argument("--industry", type=str, help="按行业分析，如 白酒")
-    parser.add_argument("--output_dir", type=str, default="reports", help="报告输出目录")
+    parser.add_argument("--output_dir", type=str, default=str(settings.paths.reports_dir), help="报告输出目录")
     args = parser.parse_args()
 
     reader = StockReader()

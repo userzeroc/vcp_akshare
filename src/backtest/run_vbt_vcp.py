@@ -18,9 +18,10 @@ import numpy as np
 from datetime import datetime
 
 from src.data.reader import StockReader
-from src.backtest_vbt.engine import VbtBacktestEngine
-from src.backtest_vbt.signals import vcp_signals
-from src.backtest_vbt.report import print_report, save_equity_curve, save_trades_csv, save_grid_heatmap
+from src.config.settings import settings
+from src.backtest.vbt.engine import VbtBacktestEngine
+from src.backtest.vbt.signals import vcp_signals
+from src.backtest.vbt.report import print_report, save_equity_curve, save_trades_csv, save_grid_heatmap
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ def run_single(
     initial_capital: float = 1_000_000.0,
     last_t_depth: float = 0.08,
     vol_exhaust_ratio: float = 0.40,
-    output_dir: str = "backtest_results_vbt",
+    output_dir: str = str(settings.paths.backtest_dir),
     save_html: bool = True,
     save_csv: bool = True,
 ):
@@ -106,7 +107,7 @@ def run_grid(
     start_date: str,
     end_date: str,
     initial_capital: float = 1_000_000.0,
-    output_dir: str = "backtest_results_vbt",
+    output_dir: str = str(settings.paths.backtest_dir),
 ):
     """
     对 last_t_depth × vol_exhaust_ratio 做网格扫描。
@@ -183,7 +184,7 @@ if __name__ == "__main__":
     parser.add_argument("--capital",  type=float, default=1_000_000.0, help="初始资金")
     parser.add_argument("--depth",    type=float, default=0.08,        help="波幅收缩阈值")
     parser.add_argument("--vol-ratio",type=float, default=0.40,        help="地量倍数")
-    parser.add_argument("--output-dir",type=str,  default="backtest_results_vbt", help="输出目录")
+    parser.add_argument("--output-dir",type=str,  default=str(settings.paths.backtest_dir), help="输出目录")
     parser.add_argument("--grid",     action="store_true",             help="启用参数网格扫描")
     parser.add_argument("--no-html",  action="store_true",             help="不保存 HTML 权益曲线")
     parser.add_argument("--no-csv",   action="store_true",             help="不保存 CSV 交易明细")
