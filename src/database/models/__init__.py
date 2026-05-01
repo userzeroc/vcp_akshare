@@ -13,6 +13,7 @@ from .adj_factor import AdjFactor
 from .index_daily import IndexDaily
 from .daily_basic import DailyBasic
 from .industry_member import IndustryMember
+from .stk_holdernumber import StkHolderNumber
 
 __all__ = [
     "Base",
@@ -23,4 +24,5 @@ __all__ = [
     "IndexDaily",
     "DailyBasic",
     "IndustryMember",
+    "StkHolderNumber",
 ]
