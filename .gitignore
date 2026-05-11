@@ -47,5 +47,5 @@ logs/
 *.csv
 *.xlsx
 *.xls
-data/
+/data/
 results/
