@@ -129,8 +129,7 @@ vcp_akshare/
     │   │   ├── upsert.py       # 幂等写入引擎
     │   │   └── writer.py       # 高级组合入口
     │   └── sync/               # 同步调度层
-    │       ├── init_foundation.py  # 基础数据初始化
-    │       ├── full_sync.py    # 全量同步
+    │       ├── full_sync.py    # 基础数据 + 全量历史同步
     │       ├── daily_sync.py   # 每日增量同步
     │       └── manual_sync.py  # 手动同步
     ├── strategy/               # 策略模块
@@ -331,10 +330,9 @@ def get_session() -> Generator[Session, None, None]:
 ```mermaid
 graph TB
     subgraph "sync/ 调度层"
-        S1["init_foundation.py"]
-        S2["full_sync.py"]
-        S3["daily_sync.py"]
-        S4["manual_sync.py"]
+        S1["full_sync.py"]
+        S2["daily_sync.py"]
+        S3["manual_sync.py"]
     end
 
     subgraph "fetchers/ 获取层"
@@ -469,8 +467,7 @@ price_qfq = price × adj_factor / latest_adj_factor
 
 | 脚本 | 命令 | 用途 |
 |------|------|------|
-| [init_foundation.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/data/sync/init_foundation.py) | `python -m src.data.sync.init_foundation` | 首次初始化基础数据（日历+股票列表） |
-| [full_sync.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/data/sync/full_sync.py) | `python -m src.data.sync.full_sync` | 全量历史数据同步（含日线+复权因子） |
+| [full_sync.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/data/sync/full_sync.py) | `python -m src.data.sync.full_sync --only cal` / `--only basic` / 全量执行 | 基础数据初始化与全量历史数据同步 |
 | [daily_sync.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/data/sync/daily_sync.py) | `python -m src.data.sync.daily_sync` | 每日增量同步（收盘后运行） |
 | [manual_sync.py](file:///Users/jiachuxiong/webProject/myProject/pythonProject/vcp_akshare/src/data/sync/manual_sync.py) | `python -m src.data.sync.manual_sync` | 单只股票/指数手动同步 |
 
@@ -886,18 +883,24 @@ result: WaveResult = detector.detect(df)  # df 须含 avg_price 列
 
 ```bash
 # Step 1: 安装依赖
-pip install -r requirements.txt
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
 
 # Step 2: 配置环境变量
-cp .env.example .env  # 填入 TUSHARE_TOKEN 和 DB 连接信息
+# 创建 .env，填入 DB 连接信息和 TUSHARE_TOKEN
 
-# Step 3: 初始化基础数据（交易日历 + 股票列表）
-python -m src.data.sync.init_foundation
+# Step 3: 初始化数据库表结构
+alembic upgrade head
 
-# Step 4: 全量同步历史数据（首次需数小时）
-python -m src.data.sync.full_sync
+# Step 4: 初始化基础数据（交易日历 + 股票列表）
+python -m src.data.sync.full_sync --only cal
+python -m src.data.sync.full_sync --only basic
 
-# Step 5: 运行回测
+# Step 5: 全量同步历史数据（首次需数小时）
+python -m src.data.sync.full_sync --start 20200101
+
+# Step 6: 运行回测
 python -m src.main
 ```
 
@@ -1073,23 +1076,25 @@ graph TB
 # 1. 克隆代码并安装依赖
 git clone <repo_url>
 cd vcp_akshare
-pip install -r requirements.txt
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
 
 # 2. 创建 PostgreSQL 数据库
 createdb mydb
 
 # 3. 配置环境变量
-cp .env.example .env
-# 编辑 .env，填入实际的 DB 连接信息和 TUSHARE_TOKEN
+# 创建 .env，填入实际的 DB 连接信息和 TUSHARE_TOKEN
 
 # 4. 初始化数据库表结构
 alembic upgrade head
 
 # 5. 同步基础数据
-python -m src.data.sync.init_foundation
+python -m src.data.sync.full_sync --only cal
+python -m src.data.sync.full_sync --only basic
 
 # 6. 同步历史行情（首次约需数小时）
-python -m src.data.sync.full_sync
+python -m src.data.sync.full_sync --start 20200101
 ```
 
 ### 13.3 定时任务配置

@@ -57,10 +57,9 @@ def upsert_dataframe(
     model_cols = {col.key for col in model.__table__.columns}
     df = df[[c for c in df.columns if c in model_cols]].copy()
 
-    # 将 NaN/NaT 转为 None（PostgreSQL 不认识 float NaN 或 Pandas NaT）
-    # 使用 pd.NA 和 replace 确保更彻底的转换
-    df = df.replace({pd.NA: None, pd.NaT: None})
-    df = df.where(pd.notna(df), other=None)
+    # 将 NaN/NaT 彻底转为 None（PostgreSQL 不认识 float NaN 或 Pandas NaT）。
+    # 先转 object，避免 float 列在填充 None 时被强制回 NaN。
+    df = df.astype(object).where(pd.notna(df), other=None)
 
     records = df.to_dict(orient="records")
     total = len(records)

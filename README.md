@@ -37,9 +37,30 @@ logs/                       # 运行日志
 ## 三、 快速上手
 
 ### 1. 环境配置
+
 ```bash
-pip install -r requirements.txt
-cp .env.example .env  # 填入 TUSHARE_TOKEN 和 DB 连接信息
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+```
+
+如遇到 `uv` 用户级缓存目录权限问题，可改用项目内缓存：
+
+```bash
+uv --cache-dir .uv-cache venv .venv
+uv --cache-dir .uv-cache pip install -r requirements.txt
+```
+
+在项目根目录创建 `.env`，填入数据库连接信息与 Tushare Token：
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=mysecretpassword
+DB_NAME=mydb
+
+TUSHARE_TOKEN=your_tushare_token
 ```
 
 #### Tushare 代理配置 (可选)
@@ -50,21 +71,43 @@ TUSHARE_HTTP_URL=https://your-proxy-url.workers.dev
 > [!WARNING]
 > 使用动态 IP 代理（如某些 Workers）可能会触发 Tushare 的 **IP 数量超限** 限制。如果遇到该错误，建议切换回官方直连模式或增加请求间隔。
 
-### 2. 数据同步
-首次运行需初始化基础数据（交易日历、股票列表）：
+### 2. 数据库初始化
+
+创建 PostgreSQL 数据库，并执行 Alembic 迁移生成表结构：
+
 ```bash
-python -m src.data.sync.init_foundation
+createdb mydb
+alembic upgrade head
 ```
-或者同步特定个股/指数的历史数据：
+
+### 3. 数据同步
+
+首次运行先同步基础数据（交易日历、股票列表）：
+
+```bash
+python -m src.data.sync.full_sync --only cal
+python -m src.data.sync.full_sync --only basic
+```
+
+首次完整建库可继续同步历史行情（耗时较长，支持重复执行与断点补齐）：
+
+```bash
+python -m src.data.sync.full_sync --start 20200101
+```
+
+如果只想同步特定个股/指数，可使用手动同步脚本：
+
 ```bash
 python -m src.data.sync.manual_sync
 ```
+
 日常增量更新：
+
 ```bash
 python -m src.data.sync.daily_sync
 ```
 
-### 3. 运行回测
+### 4. 运行回测
 修改 `src/main.py` 中的目标股票和策略，直接运行：
 ```bash
 python -m src.main
@@ -74,7 +117,7 @@ python -m src.main
 python -m src.backtest.run_vcp_backtest --stock 600089.SH
 ```
 
-### 4. 实时信号扫描
+### 5. 实时信号扫描
 扫描多只股票是否触发 VCP 买入信号：
 ```bash
 python -m src.tools.scanner --codes 600089.SH,601012.SH --strategy vcp

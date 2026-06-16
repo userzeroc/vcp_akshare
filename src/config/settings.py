@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # 尝试导入 python-dotenv，如果没安装也不强制报错，方便直接使用环境变量
 try:
@@ -47,9 +47,9 @@ class PathConfig:
 
 @dataclass
 class Settings:
-    db: DatabaseConfig = DatabaseConfig()
-    tushare: TushareConfig = TushareConfig()
-    paths: PathConfig = PathConfig()
+    db: DatabaseConfig = field(default_factory=DatabaseConfig)
+    tushare: TushareConfig = field(default_factory=TushareConfig)
+    paths: PathConfig = field(default_factory=PathConfig)
     
 # 暴露全局设置实例
 settings = Settings()

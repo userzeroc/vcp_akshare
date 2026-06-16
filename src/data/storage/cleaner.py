@@ -171,8 +171,16 @@ def clean_stk_holdernumber(df: pd.DataFrame) -> pd.DataFrame:
     df["ann_date"] = _to_date(df["ann_date"])
     if "end_date" in df.columns:
         df["end_date"] = _to_date(df["end_date"])
-    df = _to_numeric_cols(df, ["holder_num"])
+
+    # holder_num 逻辑上是可空整数，需避免 NaN/异常值触发整型写库错误
+    if "holder_num" in df.columns:
+        df["holder_num"] = pd.to_numeric(df["holder_num"], errors="coerce")
+        # PostgreSQL Integer(int4) 安全边界 + 非负约束
+        int4_min, int4_max = -2147483648, 2147483647
+        df.loc[~df["holder_num"].between(int4_min, int4_max), "holder_num"] = pd.NA
+        df.loc[df["holder_num"] < 0, "holder_num"] = pd.NA
+        df["holder_num"] = df["holder_num"].round().astype("Int64")
+
     df = _strip_str_cols(df, ["ts_code"])
     df = df.drop_duplicates(subset=["ts_code", "ann_date"])
     return df.reset_index(drop=True)
-
